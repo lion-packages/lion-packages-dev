@@ -52,6 +52,7 @@ import v4_FRM from "./Versions/Framework/v4_FRM";
 import v4_CMMD from "./Versions/Commands/V4_CMMD";
 import v10_LBD from "./Versions/libraries/database/v10_LDB";
 import v11_LBD from "./Versions/libraries/database/v11_LDB";
+import v12_LRT from "./Versions/libraries/route/v12_LRT";
 
 export default function Content() {
   return {
@@ -160,6 +161,7 @@ export default function Content() {
         description:
           "This library has quick router usage with regular expressions.",
         versions: {
+          v12: v12_LRT(),
           v11: v11_LRT(),
           v10: v10_LRT(),
           v9: v9_LRT(),

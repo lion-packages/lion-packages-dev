@@ -673,18 +673,8 @@ export default function v4_CMMD() {
       group: "SCHEDULE",
       childs: [
         {
-          name: "php lion schedule:list",
-          desc: "Displays a list of available scheduled tasks.",
-          args: [],
-        },
-        {
           name: "php lion schedule:run",
           desc: "Query and execute queued tasks in the background.",
-          args: [],
-        },
-        {
-          name: "php lion schedule:up",
-          desc: "Stores all scheduled tasks.",
           args: [],
         },
       ],

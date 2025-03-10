@@ -1,6 +1,6 @@
 services:
     app:
-        container_name: web-documentation-app
+        container_name: lion-packages-dev-app
         build:
             context: .
             dockerfile: Dockerfile

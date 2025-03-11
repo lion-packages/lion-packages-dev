@@ -6,6 +6,27 @@ import Example from "../../../../pages/components/Example";
 import { Fragment } from "react";
 import Title from "../../../../pages/components/Title";
 import SupportVersion from "../../../../pages/components/SupportVersion";
+import CommmonDatabase from "./CommmonDatabase";
+import PhpCodeBlock from "../../../../pages/components/CodeBlock/PhpCodeBlock";
+
+const addCommonDatabase = function (driver) {
+  const common = CommmonDatabase(driver);
+
+  const commonEntries = Object.entries(common);
+
+  const elements = commonEntries.reduce(
+    (acc, [interfaceName, interfaceObject]) => {
+      if (interfaceObject.shared.includes(driver)) {
+        return { ...acc, ...interfaceObject.methods };
+      }
+
+      return acc;
+    },
+    {}
+  );
+
+  return elements;
+};
 
 export default function v11_LBD() {
   return {
@@ -53,9 +74,94 @@ export default function v11_LBD() {
         },
       },
     },
+    connection: {
+      name: "Connection::class",
+      type: "sub_modules",
+      list: {
+        "add-connection": {
+          name: "addConnection",
+          code: (
+            <Fragment>
+              <LibraryTitle className="Connection" methodName="addConnection" />
+
+              <Description description={"Add a connection."} />
+
+              <PhpCodeBlock
+                content={`<?php
+              
+declare(strict_types=1);
+
+require_once __DIR__ . "/vendor/autoload.php";
+
+use Lion\\Database\\Connection;
+use Lion\\Database\\Driver;
+
+Connection::addConnection('mysql-connection', [
+    'type' => Driver::MYSQL
+    'host' => '127.0.0.1',
+    'port' => 3306,
+    'dbname' => 'lion_database',
+    'user' => 'root',
+    'password' => '',
+    'database' => 'test',
+]);
+`}
+              />
+            </Fragment>
+          ),
+        },
+        "remove-connection": {
+          name: "removeConnection",
+          code: (
+            <Fragment>
+              <LibraryTitle className="Connection" methodName="addConnection" />
+
+              <Description description={"Add a connection."} />
+
+              <PhpCodeBlock
+                content={`<?php
+          
+declare(strict_types=1);
+
+require_once __DIR__ . "/vendor/autoload.php";
+
+use Lion\\Database\\Connection;
+
+Connection::removeConnection('mysql-connection');
+`}
+              />
+            </Fragment>
+          ),
+        },
+        "get-connections": {
+          name: "getConnections",
+          code: (
+            <Fragment>
+              <LibraryTitle className="Connection" methodName="addConnection" />
+
+              <Description description={"Add a connection."} />
+
+              <PhpCodeBlock
+                content={`<?php
+          
+declare(strict_types=1);
+
+require_once __DIR__ . "/vendor/autoload.php";
+
+use Lion\\Database\\Connection;
+
+$connections = Connection::getConnections();
+
+var_dump($connections);
+`}
+              />
+            </Fragment>
+          ),
+        },
+      },
+    },
     driver: {
       name: "Driver::class",
-      type: "sub_modules",
       list: {
         run: {
           name: "run",
@@ -92,10 +198,6 @@ export default function v11_LBD() {
                 language={"php"}
                 content={`<?php
 
-declare(strict_types=1);
-
-use Lion\\Database\\Driver;
-
 /**
  * ------------------------------------------------------------------------------
  * Start database service
@@ -104,16 +206,32 @@ use Lion\\Database\\Driver;
  * ------------------------------------------------------------------------------
  */
 
+declare(strict_types=1);
+
+use Lion\\Database\\Driver;
+
 Driver::run([
-    'default' => 'connection-name',
+    'default' => 'mysql-connection',
     'connections' => [
-        'connection-name' => [
-            'type' => 'mysql',
+        'mysql-connection' => [
+            'type' => Driver::MYSQL,
             'host' => 'localhost',
             'port' => 3306,
             'dbname' => 'lion_database',
             'user' => 'root',
             'password' => 'lion',
+        ],
+        'postgresql-connection' => [
+            'type' => Driver::POSTGRESQL,
+            'host' => 'localhost',
+            'port' => 3306,
+            'dbname' => 'lion_database',
+            'user' => 'root',
+            'password' => 'lion',
+        ],
+        'sqlite-connection' => [
+            'type' => Driver::SQLITE,
+            'dbname' => '/storage/lion_database.sqlite',
         ],
     ],
 ]);
@@ -142,10 +260,6 @@ Driver::run([
                 language={"php"}
                 content={`<?php
 
-declare(strict_types=1);
-
-use LionDatabase\\Driver;
-
 /**
  * ------------------------------------------------------------------------------
  * Start database service
@@ -154,17 +268,21 @@ use LionDatabase\\Driver;
  * ------------------------------------------------------------------------------
  */
 
+declare(strict_types=1);
+
+use LionDatabase\\Driver;
+
 Driver::run([
     'default' => 'connection-name',
     'connections' => [
         'connection-name' => [
-            'type' => 'mysql',
+            'type' => Driver::MYSQL,
             'host' => 'localhost',
             'port' => 3306,
             'dbname' => 'lion_database',
             'user' => 'root',
             'password' => 'lion',
-            'config' => [
+            'options' => [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
             ],
@@ -178,244 +296,180 @@ Driver::run([
         },
       },
     },
+    "database-capsule-interface": {
+      name: "DatabaseCapsuleInterface::class",
+      list: {
+        capsule: {
+          name: "getTableName",
+          code: (
+            <Fragment>
+              <LibraryTitle
+                className="DatabaseCapsuleInterface"
+                methodName="getTableName"
+              />
+
+              <Description
+                description={
+                  "Returns the name of the entity. This interface is implemented for classes that are used as objects in queries with PDO::FETCH_CLASS."
+                }
+              />
+
+              <PhpCodeBlock
+                content={`<?php
+
+declare(strict_types=1);
+
+namespace Lion\\Database\\Interface;
+
+/**
+ * Defines a class as a capsule of an entity
+ *
+ * @package Lion\\Database\\Interface
+ */
+interface DatabaseCapsuleInterface
+{
+      /**
+       * Returns the name of the entity
+       *
+       * @return string
+       */
+      public static function getTableName(): string;
+}
+`}
+              />
+
+              <Description
+                description={"Implements the interface in a class."}
+              />
+
+              <PhpCodeBlock
+                content={`<?php
+
+declare(strict_types=1);
+
+namespace Database\\Class;
+
+/**
+ * Capsule class for the 'users' entity
+ *
+ * @package Database\\Class
+ */
+class Users implements DatabaseCapsuleInterface
+{
+      /**
+       * [Property for 'idusers']
+       *
+       * @var int $idusers
+       */
+      public int $idusers;
+
+      /**
+       * [Property for 'users_name']
+       *
+       * @var int $users_name
+       */
+      public int $users_name;
+
+      /**
+       * {@inheritDoc}
+       */
+      public static function getTableName(): string
+      {
+            return 'users';
+      }
+}
+`}
+              />
+
+              <Description
+                description={
+                  "Use a query that returns objects of type DatabaseCapsuleInterface."
+                }
+              />
+
+              <Example
+                number={1}
+                language={"php"}
+                content={`<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Database\\Class\\Users;
+use Lion\\Database\\Drivers\\MySQL;
+use Lion\\Database\\Interface\\DatabaseCapsuleInterface;
+
+/** @var array<int, Users> $users */
+$users = MySQL::connection('local')
+    ->table(Users::getTableName())
+    ->select()
+    ->where()->equalTo('idusers', 1)
+    ->fetchMode(PDO::FETCH_CLASS, Users::class)
+    ->getAll();
+
+var_dump($users);
+`}
+              />
+
+              <Example
+                number={2}
+                language={"php"}
+                content={`<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Database\\Class\\Users;
+use Lion\\Database\\Drivers\\PostgreSQL;
+use Lion\\Database\\Interface\\DatabaseCapsuleInterface;
+
+/** @var array<int, Users> $users */
+$users = PostgreSQL::connection('local')
+    ->table(Users::getTableName())
+    ->select()
+    ->where()->equalTo('idusers', 1)
+    ->fetchMode(PDO::FETCH_CLASS, Users::class)
+    ->getAll();
+
+var_dump($users);
+`}
+              />
+
+              <Example
+                number={3}
+                language={"php"}
+                content={`<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Database\\Class\\Users;
+use Lion\\Database\\Drivers\\SQLite;
+use Lion\\Database\\Interface\\DatabaseCapsuleInterface;
+
+/** @var array<int, Users> $users */
+$users = SQLite::connection('local')
+    ->table(Users::getTableName())
+    ->select()
+    ->where()->equalTo('idusers', 1)
+    ->fetchMode(PDO::FETCH_CLASS, Users::class)
+    ->getAll();
+
+var_dump($users);
+`}
+              />
+            </Fragment>
+          ),
+        },
+      },
+    },
     mysql: {
       name: "MySQL::class",
-      type: "sub_modules",
       list: {
-        connection: {
-          name: "connection",
-          code: (
-            <Fragment>
-              <LibraryTitle className="MySQL" methodName="connection" />
-
-              <Description
-                description={
-                  "Changes the data of the current connection with those of the specified connection."
-                }
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::connection('connection');
-`}
-              />
-            </Fragment>
-          ),
-        },
-        transaction: {
-          name: "transaction",
-          code: (
-            <Fragment>
-              <LibraryTitle className="MySQL" methodName="transaction" />
-
-              <Description
-                description={
-                  "Activate the configuration to execute a transaction type process in the service."
-                }
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::connection('connection')
-    ->transaction();
-`}
-              />
-            </Fragment>
-          ),
-        },
-        "enable-insert": {
-          name: "enableInsert",
-          code: (
-            <Fragment>
-              <LibraryTitle className="MySQL" methodName="enableInsert" />
-
-              <Description
-                description={
-                  "Enable the setting for nesting insert statements."
-                }
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::connection('connection')
-    ->enableInsert();
-`}
-              />
-            </Fragment>
-          ),
-        },
-        execute: {
-          name: "execute",
-          code: (
-            <Fragment>
-              <LibraryTitle className="MySQL" methodName="execute" />
-
-              <Description description={"Execute the current query."} />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::connection('connection')
-    ->query("INSERT INTO users (users_name) VALUES ('Sergio')")
-    ->execute();
-`}
-              />
-            </Fragment>
-          ),
-        },
-        get: {
-          name: "get",
-          code: (
-            <Fragment>
-              <LibraryTitle className="MySQL" methodName="get" />
-
-              <Description description={"Run and get an object from a row."} />
-
-              <CodeBlock
-                language={"php"}
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$user = DB::table('users')
-    ->select()
-    ->where()->equalTo('idusers', 1)
-    ->get();
-
-var_dump($user);
-`}
-              />
-
-              <CodeBlock
-                language={"php"}
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$user = DB::table('users')
-    ->select('users_name', 'users_lastname')
-    ->where()->equalTo('idusers', 1)
-    ->get();
-
-var_dump($user);
-`}
-              />
-            </Fragment>
-          ),
-        },
-        "get-all": {
-          name: "getAll",
-          code: (
-            <Fragment>
-              <LibraryTitle className="MySQL" methodName="getAll" />
-
-              <Description description={"Run and get an array of objects."} />
-
-              <CodeBlock
-                language={"php"}
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$users = DB::table('users')
-    ->select()
-    ->getAll();
-
-var_dump($users);
-`}
-              />
-
-              <CodeBlock
-                language={"php"}
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$users = DB::table('users')
-    ->select('users_name', 'users_lastname')
-    ->getAll();
-
-var_dump($users);
-`}
-              />
-            </Fragment>
-          ),
-        },
-        query: {
-          name: "query",
-          code: (
-            <Fragment>
-              <LibraryTitle className={"MySQL"} methodName={"query"} />
-
-              <Description
-                description={"Nests the QUERY statement in the current query."}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::connection('connection')
-    ->query('INSERT INTO users (users_name) VALUES ("Sergio")')
-    ->execute();
-`}
-              />
-            </Fragment>
-          ),
-        },
+        ...addCommonDatabase("MySQL"),
         database: {
           name: "database",
           code: (
@@ -631,34 +685,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Lion\\Database\\Drivers\\MySQL as DB;
 
 DB::onDelete();
-`}
-              />
-            </Fragment>
-          ),
-        },
-        "on-update": {
-          name: "onUpdate",
-          code: (
-            <Fragment>
-              <LibraryTitle className="MySQL" methodName="onUpdate" />
-
-              <Description
-                description={
-                  "Nests the ON UPDATE statement in the current query."
-                }
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::onUpdate();
 `}
               />
             </Fragment>
@@ -1625,42 +1651,6 @@ DB::with()->recursive(...);
             </Fragment>
           ),
         },
-        table: {
-          name: "table",
-          code: (
-            <Fragment>
-              <LibraryTitle className={"MySQL"} methodName={"table"} />
-
-              <Description
-                description={"Nests the TABLE statement in the current query."}
-              />
-
-              <Example
-                number={1}
-                language="php"
-                content={`<?php
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::table('users')
-    ->select()
-    ->getAll();
-  `}
-              />
-
-              <Example
-                number={2}
-                language="php"
-                content={`<?php
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::table();
-  `}
-              />
-            </Fragment>
-          ),
-        },
         view: {
           name: "view",
           code: (
@@ -2120,39 +2110,6 @@ DB::columns();
             </Fragment>
           ),
         },
-        bulk: {
-          name: "bulk",
-          code: (
-            <Fragment>
-              <LibraryTitle className="MySQL" methodName="bulk" />
-
-              <Description
-                description={"Nesting multiple values in an insert run."}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-                  
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::table('users')
-    ->bulk(['users_name', 'users_lastname'], [
-        ['Sergio',  'Leon'],
-        ['Emmanuel','Hernandez'],
-        ['Santiago','Ospina'],
-        ['Santiago','Correa'],
-    ])
-    ->execute();
-`}
-              />
-            </Fragment>
-          ),
-        },
         in: {
           name: "in",
           code: (
@@ -2211,130 +2168,6 @@ DB::call('stored_procedure_name', [
     1,
 ])
     ->execute();
-`}
-              />
-            </Fragment>
-          ),
-        },
-        delete: {
-          name: "delete",
-          code: (
-            <Fragment>
-              <LibraryTitle className={"MySQL"} methodName={"delete"} />
-
-              <Description
-                description={"Nests the DELETE statement in the current query."}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::table('users')
-    ->delete()
-    ->where('idusers')->equalTo(1)
-    ->execute();
-`}
-              />
-            </Fragment>
-          ),
-        },
-        update: {
-          name: "update",
-          code: (
-            <Fragment>
-              <LibraryTitle className={"MySQL"} methodName={"update"} />
-
-              <Description
-                description={"Nests the UPDATE statement in the current query."}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::table('users')
-    ->update([
-        'users_name' => 'Sergio',
-        'users_date' => '1999-09-30',
-        'users_phone' => '3159999999',
-    ])
-    ->where('idusers')->equalTo(1)
-    ->execute();
-`}
-              />
-            </Fragment>
-          ),
-        },
-        insert: {
-          name: "insert",
-          code: (
-            <Fragment>
-              <LibraryTitle className={"MySQL"} methodName={"insert"} />
-
-              <Description
-                description={"Nests the INSERT statement in the current query."}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-DB::table('users')
-    ->insert([
-        'users_name' => 'Sergio',
-        'users_date' => '1999-09-30',
-        'users_phone' => '3159999999',
-    ])
-    ->execute();
-`}
-              />
-            </Fragment>
-          ),
-        },
-        select: {
-          name: "select",
-          code: (
-            <Fragment>
-              <LibraryTitle className="MySQL" methodName="select" />
-
-              <Description
-                description={"Nests the SELECT statement in the current query."}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$users = DB::table('users')
-    ->select()
-    ->getAll();
-
-var_dump($users);
 `}
               />
             </Fragment>
@@ -2820,166 +2653,6 @@ var_dump($users);
             </Fragment>
           ),
         },
-        where: {
-          name: "where",
-          code: (
-            <Fragment>
-              <LibraryTitle className={"MySQL"} methodName={"where"} />
-
-              <Description
-                description={"Nests the WHERE statement in the current query."}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$user = DB::table('users')
-    ->select()
-    ->where()->equalTo('idusers', 1)
-    ->get();
-
-var_dump($user);
-`}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$user = DB::table('users')
-    ->select()
-    ->where(function (): void {
-        DB::equalTo('idusers', 1);
-    }) // WHERE (idusers = 1)
-    ->get();
-
-var_dump($user);
-`}
-              />
-            </Fragment>
-          ),
-        },
-        and: {
-          name: "and",
-          code: (
-            <Fragment>
-              <LibraryTitle className={"MySQL"} methodName={"and"} />
-
-              <Description
-                description={"Nests the AND statement in the current query."}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$user = DB::table('users')
-    ->select()
-    ->where()->equalTo('idusers', 1)
-    ->and()->equalTo('create_at', '2025-01-22')
-    ->get();
-
-var_dump($user);
-`}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$user = DB::table('users')
-    ->select()
-    ->where()->equalTo('idusers', 1)
-    ->and(function (): void {
-        DB::equalTo('create_at', '2025-01-22');
-    }); // AND (create_at = '2025-01-22')
-    ->get();
-
-var_dump($user);
-`}
-              />
-            </Fragment>
-          ),
-        },
-        or: {
-          name: "or",
-          code: (
-            <Fragment>
-              <LibraryTitle className={"MySQL"} methodName={"or"} />
-
-              <Description
-                description={"Nests the OR statement in the current query."}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$user = DB::table('users')
-    ->select()
-    ->where()->equalTo('idusers', 1)
-    ->or()->equalTo('idusers', 2)
-    ->get();
-
-var_dump($user);
-`}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$user = DB::table('users')
-    ->select()
-    ->where()->equalTo('idusers', 1)
-    ->or(function (): void {
-        DB::equalTo('idusers', 2);
-    }); // OR (idusers = 2)
-    ->get();
-
-var_dump($user);
-`}
-              />
-            </Fragment>
-          ),
-        },
         "get-column": {
           name: "getColumn",
           code: (
@@ -3239,6 +2912,18 @@ DB::table('users')
             </Fragment>
           ),
         },
+      },
+    },
+    postgresql: {
+      name: "PostgreSQL::class",
+      list: {
+        ...addCommonDatabase("PostgreSQL"),
+      },
+    },
+    sqlite: {
+      name: "SQLite::class",
+      list: {
+        ...addCommonDatabase("SQLite"),
       },
     },
     "mysql-schema": {
@@ -3607,214 +3292,6 @@ use Lion\\Database\\Drivers\\Schema\\MySQL as Schema;
 
 Schema::connection('connection')
     ->dropView('view_name')
-    ->execute();
-`}
-              />
-            </Fragment>
-          ),
-        },
-      },
-    },
-    postgresql: {
-      name: "PostgreSQL::class",
-      type: "sub_modules",
-      list: {
-        connection: {
-          name: "connection",
-          code: (
-            <Fragment>
-              <LibraryTitle className="PostgreSQL" methodName="connection" />
-
-              <Description
-                description={
-                  "Changes the data of the current connection with those of the specified connection."
-                }
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\PostgreSQL as DB;
-
-DB::connection('connection');
-`}
-              />
-            </Fragment>
-          ),
-        },
-        transaction: {
-          name: "transaction",
-          code: (
-            <Fragment>
-              <LibraryTitle className="PostgreSQL" methodName="transaction" />
-
-              <Description
-                description={
-                  "Activate the configuration to execute a transaction type process in the service."
-                }
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\PostgreSQL as DB;
-
-DB::connection('connection')
-    ->transaction();
-`}
-              />
-            </Fragment>
-          ),
-        },
-        execute: {
-          name: "execute",
-          code: (
-            <Fragment>
-              <LibraryTitle className="PostgreSQL" methodName="execute" />
-
-              <Description description={"Execute the current query."} />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\PostgreSQL as DB;
-
-DB::connection('connection')
-    ->query("INSERT INTO users (users_name) VALUES ('Sergio')")
-    ->execute();
-`}
-              />
-            </Fragment>
-          ),
-        },
-        get: {
-          name: "get",
-          code: (
-            <Fragment>
-              <LibraryTitle className="PostgreSQL" methodName="get" />
-
-              <Description description={"Run and get an object from a row."} />
-
-              <CodeBlock
-                language={"php"}
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\PostgreSQL as DB;
-
-$user = DB::query('SELECT * FROM users WHERE idusers = 1')
-    ->get();
-
-var_dump($user);
-`}
-              />
-
-              <CodeBlock
-                language={"php"}
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$user = DB::table('users')
-    ->select('users_name', 'users_lastname')
-    ->where()->equalTo('idusers', 1)
-    ->get();
-
-var_dump($user);
-`}
-              />
-            </Fragment>
-          ),
-        },
-        "get-all": {
-          name: "getAll",
-          code: (
-            <Fragment>
-              <LibraryTitle className="PostgreSQL" methodName="getAll" />
-
-              <Description description={"Run and get an array of objects."} />
-
-              <CodeBlock
-                language={"php"}
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\PostgreSQL as DB;
-
-$users = DB::query('SELECT * FROM users')
-    ->getAll();
-
-var_dump($users);
-`}
-              />
-
-              <CodeBlock
-                language={"php"}
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\MySQL as DB;
-
-$users = DB::table('users')
-    ->select('users_name', 'users_lastname')
-    ->getAll();
-
-var_dump($users);
-`}
-              />
-            </Fragment>
-          ),
-        },
-        query: {
-          name: "query",
-          code: (
-            <Fragment>
-              <LibraryTitle className={"PostgreSQL"} methodName={"query"} />
-
-              <Description
-                description={"Nests the QUERY statement in the current query."}
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Lion\\Database\\Drivers\\PostgreSQL as DB;
-
-DB::connection('connection')
-    ->query('INSERT INTO users (users_name) VALUES ("Sergio")')
     ->execute();
 `}
               />

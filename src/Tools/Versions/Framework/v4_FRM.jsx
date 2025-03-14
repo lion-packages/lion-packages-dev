@@ -1485,7 +1485,6 @@ declare(strict_types=1);
 namespace App\\Http\\Controllers;
 
 use App\\Models\\HomeModel;
-use Lion\\Database\\Interface\\DatabaseCapsuleInterface;
 use stdClass;
 
 /**
@@ -1500,9 +1499,9 @@ class HomeController
      *
      * @param HomeModel $model [Description]
      *
-     * @return stdClass|array|DatabaseCapsuleInterface
+     * @return int|stdClass
      */
-    public function example(HomeModel $model): stdClass|array|DatabaseCapsuleInterface
+    public function example(HomeModel $model): int|stdClass
     {
         return $homeModel->exampleDB();
     }
@@ -1542,7 +1541,7 @@ use Lion\\Route;
  * -----------------------------------------------------------------------------
  */
 
-Route::get('home', [HomeController::class, 'method_name']);
+Route::get('home', [HomeController::class, 'example']);
 `}
               />
             </Fragment>
@@ -1681,9 +1680,9 @@ class HomeModel
     /**
      * Description
      *
-     * @return stdClass|array|DatabaseCapsuleInterface
+     * @return array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass
      */
-    public function exampleDB(): stdClass|array|DatabaseCapsuleInterface
+    public function exampleDB(): array|stdClass
     {
         return DB::table('table_name')
             ->select()
@@ -1731,9 +1730,9 @@ class HomeController
      *
      * @param HomeModel $model [Description]
      *
-     * @return stdClass|array|DatabaseCapsuleInterface
+     * @return array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass
      */
-    public function example(HomeModel $model): stdClass|array|DatabaseCapsuleInterface
+    public function example(HomeModel $model): array|stdClass
     {
         return $homeModel->exampleDB();
     }
@@ -1869,16 +1868,27 @@ declare(strict_types=1);
 namespace Database\\Class;
 
 use Lion\\Bundle\\Interface\\CapsuleInterface;
+use Lion\\Bundle\\Traits\\CapsuleTrait;
 
 /**
  * Description
  *
+ * @property string $entity [Entity name]
  * @property int|null $id [Property for id]
  *
  * @package Database\\Class
  */
 class EntityName implements CapsuleInterface 
 {
+    use CapsuleTrait;
+
+    /**
+     * [Entity name]
+     *
+     * @var string $entity
+     */
+    private static string $entity = '';
+
     /**
      * [Property for id]
      *
@@ -1888,21 +1898,14 @@ class EntityName implements CapsuleInterface
 
     /**
      * {@inheritdoc}
-     * */
-    public function jsonSerialize(): array
-    {
-        return get_object_vars($this);
-    }
-
-    /**
-     * {@inheritdoc}
-     * */
+     */
     public function capsule(): EntityName
     {
-        $this
-            ->setId(request('id'));
+        /** @var int $id */
+        $id = request('id');
 
-        return $this;
+        return $this
+            ->setId($id);
     }
 
     /**
@@ -1918,7 +1921,7 @@ class EntityName implements CapsuleInterface
     /**
      * Setter method for 'id'
      *
-     * @param int|null $id
+     * @param int|null $id [Description for 'id']
      *
      * @return EntityName
      */
@@ -1963,25 +1966,29 @@ declare(strict_types=1);
 namespace Database\\Class;
 
 use Lion\\Bundle\\Interface\\CapsuleInterface;
+use Lion\\Bundle\\Traits\\CapsuleTrait;
 
 /**
  * Description
+ *
+ * @property string $entity [Entity name]
  *
  * @package Database\\Class
  */
 class EntityName implements CapsuleInterface 
 {
-    /**
-     * {@inheritdoc}
-     * */
-    public function jsonSerialize(): array
-    {
-        return get_object_vars($this);
-    }
+    use CapsuleTrait;
 
     /**
-     * {@inheritdoc}
-     * */
+     * [Entity name]
+     *
+     * @var string $entity
+     */
+    private static string $entity = '';
+
+    /**
+     * {@inheritDoc}
+     */
     public function capsule(): EntityName
     {
         return $this;
@@ -2021,16 +2028,27 @@ declare(strict_types=1);
 namespace Database\\Class;
 
 use Lion\\Bundle\\Interface\\CapsuleInterface;
+use Lion\\Bundle\\Traits\\CapsuleTrait;
 
 /**
  * Description
  *
+ * @property string $entity [Entity name]
  * @property int|null $id [Property for id]
  *
  * @package Database\\Class
  */
 class EntityName implements CapsuleInterface 
 {
+    use CapsuleTrait;
+
+    /**
+     * [Entity name]
+     *
+     * @var string $entity
+     */
+    private static string $entity = '';
+
     /**
      * [Property for id]
      *
@@ -2039,22 +2057,12 @@ class EntityName implements CapsuleInterface
     private ?int $id = null;
 
     /**
-     * {@inheritdoc}
-     * */
-    public function jsonSerialize(): array
-    {
-        return get_object_vars($this);
-    }
-
-    /**
-     * {@inheritdoc}
-     * */
+     * {@inheritDoc}
+     */
     public function capsule(): EntityName
     {
-        $this
+        return $this
             ->setId(request('id'));
-
-        return $this;
     }
 
     /**
@@ -2070,7 +2078,7 @@ class EntityName implements CapsuleInterface
     /**
      * Setter method for 'id'
      *
-     * @param int|null $id
+     * @param int|null $id [Description for 'id']
      *
      * @return EntityName
      */
@@ -2131,7 +2139,6 @@ class ExampleException extends Exception implements ExceptionInterface
 {
     use ExceptionTrait;
 }
-
 `}
               />
             </Fragment>
@@ -3137,7 +3144,7 @@ class ExampleService
 
               <CodeBlock
                 language={"bash"}
-                content={"php lion new:middleware JWTMiddleware"}
+                content={"php lion new:middleware HeaderMiddleware"}
               />
             </Fragment>
           ),
@@ -3155,242 +3162,33 @@ class ExampleService
               />
 
               <CodeBlock
-                language={"php"}
+                language="php"
                 content={`<?php
 
 declare(strict_types=1);
 
 namespace App\\Http\\Middleware;
 
-use Lion\\Bundle\\Exceptions\\MiddlewareException;
-use Lion\\Files\\Store;
-use Lion\\Request\\Http;
-use Lion\\Request\\Status;
-use Lion\\Security\\JWT;
-use Lion\\Security\\RSA;
+use Exception;
+use Lion\\Route\\Interface\\MiddlewareInterface;
 
 /**
- * Responsible for filtering and validating the JWT sent through an HTTP request
+ * Filter the headers
  *
- * @property Store $store [Store class object]
- * @property RSA $rsa [RSA class object]
- * @property JWT $jwt [JWT class object]
- *
- * @package App\Http\Middleware
+ * @package App\\Http\\Middleware
  */
-class JWTMiddleware
+class HeaderMiddleware implements MiddlewareInterface
 {
     /**
-     * [Object of class Store]
-     *
-     * @var Store $store
+     * {@inheritDoc}
      */
-    private Store $store;
-
-    /**
-     * [Object of class RSA]
-     *
-     * @var RSA $rsa
-     */
-    private RSA $rsa;
-
-    /**
-     * [Object of class JWT]
-     *
-     * @var JWT $jwt
-     */
-    private JWT $jwt;
-
-    /**
-     * @required
-     */
-    public function setStore(Store $store): JWTMiddleware
+    public function process(): void
     {
-        $this->store = $store;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     */
-    public function setRSA(RSA $rsa): JWTMiddleware
-    {
-        $this->rsa = $rsa;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     */
-    public function setJWT(JWT $jwt): JWTMiddleware
-    {
-        $this->jwt = $jwt;
-
-        return $this;
-    }
-
-    /**
-     * Initialize RSA keys
-     *
-     * @param string $path [RSA key paths]
-     *
-     * @return void
-     */
-    private function initRSA(string $path): void
-    {
-        $this->rsa
-            ->setUrlPath(storage_path($path))
-            ->init();
-    }
-
-    /**
-     * Validate the session defined in the JWT
-     *
-     * @param object $jwt [JWT object]
-     *
-     * @return void
-     *
-     * @throws MiddlewareException [The session with the JWT has failed]
-     */
-    private function validateSession(object $jwt): void
-    {
-        if (isError($jwt)) {
-            throw new MiddlewareException($jwt->message, Status::SESSION_ERROR, Http::UNAUTHORIZED);
-        }
-
-        if (!isset($jwt->data->session)) {
-            throw new MiddlewareException('undefined session', Status::SESSION_ERROR, Http::FORBIDDEN);
+        if (!isset($_SERVER['AUTHORIZATION'])) {
+            throw new Exception('Unauthorized');
         }
     }
-
-    /**
-     * Validate if a JWT exists in the headers
-     *
-     * @return void
-     *
-     * @throws MiddlewareException [If authorization token does not exist]
-     */
-    public function existence(): void
-    {
-        if (empty($_SERVER['HTTP_AUTHORIZATION'])) {
-            throw new MiddlewareException('the JWT does not exist', Status::SESSION_ERROR, Http::UNAUTHORIZED);
-        }
-    }
-
-    /**
-     * Validate a JWT in headers even though the signature is not validated
-     *
-     * @return void
-     *
-     * @throws MiddlewareException [If the authorization token is not valid]
-     */
-    public function authorizeWithoutSignature(): void
-    {
-        $this->existence();
-
-        $splitToken = explode('.', $this->jwt->getJWT());
-
-        if (arr->of($splitToken)->length() != 3) {
-            throw new MiddlewareException('invalid JWT [AUTH-1]', Status::SESSION_ERROR, Http::UNAUTHORIZED);
-        }
-
-        $data = ((object) json_decode(base64_decode($splitToken[1]), true));
-
-        if (empty($data->data['users_code'])) {
-            throw new MiddlewareException('invalid JWT [AUTH-2]', Status::SESSION_ERROR, Http::FORBIDDEN);
-        }
-
-        $path = env('RSA_URL_PATH') . "{$data->data['users_code']}/";
-
-        if (isError($this->store->exist(storage_path($path)))) {
-            throw new MiddlewareException('invalid JWT [AUTH-3]', Status::SESSION_ERROR, Http::FORBIDDEN);
-        }
-
-        $this->initRSA($path);
-
-        $token = $this->jwt
-            ->config([
-                'publicKey' => $this->rsa->getPublicKey()
-            ])
-            ->decode($this->jwt->getJWT())
-            ->get();
-
-        $this->validateSession($token);
-
-        if (!$token->data->session || empty($token->data->session)) {
-            throw new MiddlewareException(
-                'user not logged in, you must log in',
-                Status::SESSION_ERROR,
-                Http::UNAUTHORIZED
-            );
-        }
-    }
-
-    /**
-     * Validate a JWT to check if it is still valid and the session is true
-     *
-     * @return void
-     *
-     * @throws MiddlewareException [If the user session is not authorized]
-     */
-    public function authorize(): void
-    {
-        $this->initRSA(env('RSA_URL_PATH'));
-
-        $this->existence();
-
-        $token = $this->jwt
-            ->config([
-                'publicKey' => $this->rsa->getPublicKey()
-            ])
-            ->decode($this->jwt->getJWT())
-            ->get();
-
-        $this->validateSession($token);
-
-        if (!$token->data->session || empty($token->data->session)) {
-            throw new MiddlewareException(
-                'user not logged in, you must log in',
-                Status::SESSION_ERROR,
-                Http::UNAUTHORIZED
-            );
-        }
-    }
-
-    /**
-     * Validate a JWT to check if it is still valid and the session is false
-     *
-     * @return void
-     *
-     * @throws MiddlewareException [If the user session is authorized]
-     */
-    public function notAuthorize(): void
-    {
-        $this->initRSA(env('RSA_URL_PATH'));
-
-        $this->existence();
-
-        $token = $this->jwt
-            ->config([
-                'publicKey' => $this->rsa->getPublicKey()
-            ])
-            ->decode($this->jwt->getJWT())
-            ->get();
-
-        $this->validateSession($token);
-
-        if ($token->data->session) {
-            throw new MiddlewareException(
-                'user in session, you must close the session',
-                Status::SESSION_ERROR,
-                Http::UNAUTHORIZED
-            );
-        }
-    }
-}
-`}
+}`}
               />
             </Fragment>
           ),
@@ -3418,9 +3216,8 @@ class JWTMiddleware
 
 declare(strict_types=1);
 
-use App\\Http\\Middleware\\JWTMiddleware;
+use App\\Http\\Middleware\\HeaderMiddleware;
 use Lion\\Bundle\\Helpers\\Http\\Routes;
-use Lion\\Route\\Middleware;
 
 /**
  * -----------------------------------------------------------------------------
@@ -3428,22 +3225,10 @@ use Lion\\Route\\Middleware;
  * -----------------------------------------------------------------------------
  * This is where you can register web middleware for your application
  * -----------------------------------------------------------------------------
- **/
+ */
 
 Routes::setMiddleware([
-
-    /**
-     * [Filters to validate different states with JWT]
-     */
-
-    new Middleware('jwt-existence', JWTMiddleware::class, 'existence'),
-
-    new Middleware('jwt-authorize', JWTMiddleware::class, 'authorize'),
-
-    new Middleware('jwt-not-authorize', JWTMiddleware::class, 'notAuthorize'),
-
-    new Middleware('jwt-without-signature', JWTMiddleware::class, 'authorizeWithoutSignature'),
-
+    'header' => HeaderMiddleware::class,
 ]);
 `}
               />
@@ -3471,7 +3256,7 @@ Routes::setMiddleware([
 
 use App\\Http\\Controllers\\HomeController;
 
-Route::middleware(['jwt-exist', 'jwt-authorize'], function() {
+Route::middleware(['header'], function(): void {
 	Route::get('/', [HomeController::class, 'index']);
 });
 `}
@@ -3603,11 +3388,11 @@ class ExampleSeed implements SeedInterface
    *
    * @const INDEX
    */
-  const ?int INDEX = null;
+  public const ?int INDEX = null;
 
   /**
    * {@inheritdoc}
-   **/
+   */
   public function run(): stdClass
   {
       return DB::table('example')
@@ -3830,14 +3615,6 @@ class ExampleSocket implements MessageComponentInterface
         <ini name="memory_limit" value="2048M" />
     </php>
 
-    <extensions>
-        <bootstrap class="RobinIngelbrecht\PHPUnitPrettyPrint\PhpUnitExtension">
-            <parameter name="enableByDefault" value="true" />
-            <parameter name="displayProfiling" value="false" />
-            <parameter name="useCompactMode" value="true" />
-        </bootstrap>
-    </extensions>
-
     <source>
         <include>
             <directory suffix=".php">app</directory>
@@ -3853,28 +3630,8 @@ class ExampleSocket implements MessageComponentInterface
 
     <testsuites>
         <testsuite name="All-Test">
-            <directory suffix=".php">tests/Api</directory>
             <directory suffix=".php">tests/App</directory>
             <directory suffix=".php">tests/Database</directory>
-        </testsuite>
-
-        <testsuite name="Unit">
-            <directory suffix=".php">tests/App/Enums</directory>
-            <directory suffix=".php">tests/App/Exceptions</directory>
-            <directory suffix=".php">tests/App/Interfaces</directory>
-            <directory suffix=".php">tests/Database</directory>
-        </testsuite>
-
-        <testsuite name="Integration">
-            <directory suffix=".php">tests/App/Console/Commands</directory>
-            <directory suffix=".php">tests/App/Http/Controllers</directory>
-            <directory suffix=".php">tests/App/Http/Middleware</directory>
-            <directory suffix=".php">tests/App/Http/Services</directory>
-            <directory suffix=".php">tests/App/Models</directory>
-        </testsuite>
-
-        <testsuite name="Functional">
-            <directory suffix=".php">tests/Api</directory>
         </testsuite>
     </testsuites>
 </phpunit>
@@ -3971,6 +3728,7 @@ use Lion\\Dependency\\Injection\\Container;
 use Lion\\Request\\Http;
 use Lion\\Request\\Status;
 use PHPUnit\\Framework\\Attributes\\Test as Testing;
+use stdClass;
 
 class ExampleControllerTest extends Test
 {
@@ -3987,12 +3745,15 @@ class ExampleControllerTest extends Test
     #[Testing]
     public function example(): void
     {
-        $response = $this->container->injectDependenciesMethod($this->exampleController, 'example');
+        $response = $this->container->callMethod($this->exampleController, 'example');
 
-        $this->assertIsObject($response);
+        $this->assertInstanceOf(stdClass::class, $response);
         $this->assertObjectHasProperty('code', $response);
         $this->assertObjectHasProperty('status', $response);
         $this->assertObjectHasProperty('message', $response);
+        $this->assertIsInt($response->code);
+        $this->assertIsString($response->status);
+        $this->assertIsString($response->message);
         $this->assertSame(Http::OK, $response->code);
         $this->assertSame(Status::SUCCESS, $response->code);
         $this->assertSame('OK', $response->message);
@@ -4128,7 +3889,7 @@ class ExampleExceptionTest extends Test
 
                 <CodeBlock
                   language={"bash"}
-                  content={"php lion test --suite Unit-Tests"}
+                  content={"php lion test --suite All-Tests"}
                 />
               </Fragment>
 
@@ -4149,7 +3910,7 @@ class ExampleExceptionTest extends Test
 
                 <CodeBlock
                   language={"bash"}
-                  content={"php lion test --suite Unit-Tests --report"}
+                  content={"php lion test --suite All-Tests --report"}
                 />
               </Fragment>
             </Fragment>
@@ -4308,124 +4069,6 @@ Request::header('Content-Type', 'application/json; charset=UTF-8');
       name: "Schedule",
       type: "sub_modules",
       list: {
-        "create-cron": {
-          name: "Create Cron",
-          code: (
-            <Fragment>
-              <Fragment>
-                <Title title={"Create Cron"} />
-
-                <Alert variant={"info"}>
-                  <strong>Note: </strong>Currently the framework is supported
-                  for development in Linux environments.
-                </Alert>
-
-                <Alert variant={"info"}>
-                  <strong>Note: </strong>You must have the <strong>cron</strong>{" "}
-                  library installed.
-                </Alert>
-
-                <Alert variant={"info"}>
-                  <strong>Note: </strong>When you create a scheduled task, a log
-                  file is generated in the{" "}
-                  <Badge bg="secondary">storage/logs/cron/</Badge> path.
-                </Alert>
-
-                <Description
-                  description={"Create a scheduled task from terminal."}
-                />
-
-                <CodeBlock
-                  language={"bash"}
-                  content={"php lion new:cron ExampleCron"}
-                />
-
-                <CodeBlock
-                  language={"php"}
-                  content={`<?php
-
-declare(strict_types=1);
-
-namespace App\\Console\\Cron;
-
-use App\\Console\\Commands\\ExampleCommand;
-use Lion\\Bundle\\Helpers\\Commands\\Schedule\\Schedule;
-use Lion\\Bundle\\Interface\\ScheduleInterface;
-
-/**
- * schedule ExampleCron
- *
- * @package App\\Console\\Cron
- */
-class ExampleCron implements ScheduleInterface
-{
-    /**
-     * {@inheritdoc}
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        $schedule
-            ->cron('* * * * *')
-            ->command(ExampleCommand::class)
-            ->log('example');
-    }
-}
-`}
-                />
-              </Fragment>
-
-              <Fragment>
-                <Title title={"Schedule List"} />
-
-                <Description
-                  description={"View a list of available scheduled tasks"}
-                />
-
-                <CodeBlock
-                  language={"bash"}
-                  content={"php lion schedule:list"}
-                />
-
-                <CodeBlock
-                  language={"log"}
-                  content={`+-----------  SCHEDULED TASKS  -+---------+
-| CRON      | COMMAND | OPTIONS | LOG     |
-+-----------+---------+---------+---------+
-| * * * * * | example | N/A     | example |
-+-----------+---------+---------+---------+
-+------  Showing a scheduled task  -------+`}
-                />
-              </Fragment>
-
-              <Fragment>
-                <Title title={"Mount scheduled task"} />
-
-                <Alert variant={"info"}>
-                  <strong>Note: </strong>Currently the framework is supported
-                  for development in Linux environments.
-                </Alert>
-
-                <Description
-                  description={
-                    "Add the schedule task to the crontab configuration from the environment variables file."
-                  }
-                />
-
-                <CodeBlock
-                  language={"bash"}
-                  content={`################################################################################
-################ CRONTAB -------------------------------------- ################
-################################################################################
-CRONTAB_PATH="/etc/" # the "/etc/" value for docker
-CRONTAB_PHP_PATH="/usr/local/bin/php" # the '/usr/local/bin/php' value for docker
-CRONTAB_PROJECT_PATH="/var/www/html/" # the "/var/www/html/" value for docker`}
-                />
-
-                <CodeBlock language={"bash"} content={"php lion schedule:up"} />
-              </Fragment>
-            </Fragment>
-          ),
-        },
         "queued-tasks": {
           name: "Queued tasks",
           code: (
@@ -4456,7 +4099,7 @@ CRONTAB_PROJECT_PATH="/var/www/html/" # the "/var/www/html/" value for docker`}
 use Lion\\Bundle\\Helpers\\Commands\\Schedule\\Task;
 use Lion\\Bundle\\Helpers\\Commands\\Schedule\\TaskQueue;
 
-(new TaskQueue())->push(
+ew TaskQueue()->push(
     new Task(AccountService::class, 'myMethod', [
         'account' => fake()->email(),
         'code' => fake()->numerify('######'),
@@ -4635,6 +4278,7 @@ vd($date);
                   langueage={"php"}
                   content={`<?php
 
+use Lion\\Bundle\\Helpers\\Http\\Fetch;
 use Lion\\Request\\Http;
 
 $response = fetch(
@@ -4654,6 +4298,8 @@ vd($response);
                   langueage={"php"}
                   content={`<?php
 
+use Lion\\Bundle\\Helpers\\Http\\Fetch;
+use Lion\\Bundle\\Helpers\\Http\\FetchConfiguration;
 use Lion\\Request\\Http;
 
 $response = fetch(

@@ -11,7 +11,6 @@ import FooterNavigation from "./pages/components/FooterNavigation";
 import ContentView from "./pages/ContentView";
 import LinuxConfiguration from "./pages/LinuxConfiguration";
 import Standards from "./pages/Standards";
-import Editors from "./pages/Editors";
 import { Fragment } from "react";
 
 function App() {

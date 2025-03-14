@@ -31,13 +31,13 @@ function NavbarNavigation() {
   return (
     <Navbar
       expanded={expanded}
-      sticky="top"
-      variant="dark"
-      expand="lg"
+      sticky={"top"}
+      variant={"dark"}
+      expand={"lg"}
       className="p-0 navbar-blur"
       style={{ "--bs-border-opacity": ".4" }}
     >
-      <Container>
+      <Container fluid>
         <LinkContainer to="/">
           <Navbar.Brand onClick={() => setExpanded(false)}>
             <Image src={logo} width={55} className="img-fluid" />

@@ -50,8 +50,8 @@ export default function AddTabs() {
         {Object.entries(getContent()).map(([tabName, tabObject]) => (
           <ListGroup.Item
             action
-            variant="dark"
-            className="border-0"
+            variant={"dark"}
+            className={"border-0"}
             key={tabName}
             onClick={() => {
               scrollToTop();
@@ -89,9 +89,9 @@ export default function AddTabs() {
         key={`${methods[0]}`}
       >
         <ListGroup.Item
-          variant="dark"
           action
-          className="p-1"
+          variant={"dark"}
+          className={"p-1"}
           onClick={() => scrollToTop()}
         >
           <span className="text-lion-orange">{methods[1].name}</span>
@@ -164,11 +164,7 @@ export default function AddTabs() {
           </div>
         </Col>
 
-        <Col xs={12} sm={12} md={12} lg={12} xl={7} xxl={7}>
-          <Outlet />
-        </Col>
-
-        <Col xs={12} sm={12} md={12} lg={12} xl={2} xxl={2}>
+        <Col xs={12} sm={12} md={12} lg={12} xl={3} xxl={3}>
           <div className="mb-3">
             <Form.Control
               type="search"
@@ -180,6 +176,10 @@ export default function AddTabs() {
           </div>
 
           <ListMethodsItems />
+        </Col>
+
+        <Col xs={12} sm={12} md={12} lg={12} xl={6} xxl={6}>
+          <Outlet />
         </Col>
       </Row>
     </Container>

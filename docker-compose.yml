@@ -1,11 +1,11 @@
 services:
     app:
-        container_name: web-documentation-app
+        container_name: lion-packages-dev-app
         build:
             context: .
             dockerfile: Dockerfile
         ports:
-            - "5174:5174"
+            - "5175:5175"
         volumes:
             - ./:/var/www/html
         networks:

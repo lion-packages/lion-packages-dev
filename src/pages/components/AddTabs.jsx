@@ -81,12 +81,12 @@ export default function AddTabs() {
 
     return filterItems(content[tab].list).map((methods) => (
       <LinkContainer
+        key={methods[0]}
         to={
           library === null
             ? `/docs/framework/${item_version}/${tab}/${methods[0]}`
             : `/docs/library/${library}/${item_version}/${tab}/${methods[0]}`
         }
-        key={`${methods[0]}`}
       >
         <ListGroup.Item
           action
@@ -165,17 +165,21 @@ export default function AddTabs() {
         </Col>
 
         <Col xs={12} sm={12} md={12} lg={12} xl={3} xxl={3}>
-          <div className="mb-3">
-            <Form.Control
-              type="search"
-              className="form-control-dark"
-              placeholder="Search..."
-              value={filter_search}
-              onChange={(e) => setFilter_search(e.target.value)}
-            />
-          </div>
+          <div className={"sticky-top d-none d-xl-block"}>
+            <div className="sticky-top bg-dark-logo py-3">
+              <Form.Control
+                type="search"
+                className="form-control-dark"
+                placeholder="Search..."
+                value={filter_search}
+                onChange={(e) => setFilter_search(e.target.value)}
+              />
+            </div>
 
-          <ListMethodsItems />
+            <div className="vh-100 overflow-y-scroll">
+              <ListMethodsItems />
+            </div>
+          </div>
         </Col>
 
         <Col xs={12} sm={12} md={12} lg={12} xl={6} xxl={6}>

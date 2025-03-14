@@ -1,7 +1,7 @@
 {
   "name": "Lion-Packages",
   "short_name": "LP",
-  "start_url": "https://lion-client.vercel.app",
+  "start_url": "https://dev.lion-packages.com/",
   "description": "Official client for the PHP documentation of Lion-Framework and other libraries",
   "background_color": "#111111",
   "theme_color": "#111111",

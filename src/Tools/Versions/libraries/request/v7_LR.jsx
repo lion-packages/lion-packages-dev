@@ -741,39 +741,13 @@ public const string PATCH = 'PATCH';
 
 declare(strict_types=1);
 
+require_once('./vendor/autoload.php');
+
 use Lion\\Request\\Request;
 
-$data = (new Request())->capure();
+$data = new Request()->capure();
 
 var_dump($data);
-`}
-              />
-            </Fragment>
-          ),
-        },
-        header: {
-          name: "header",
-          code: (
-            <Fragment>
-              <LibraryTitle className={"Request"} methodName={"header"} />
-
-              <Description
-                description={
-                  "The header function allows you to create headers."
-                }
-              />
-
-              <CodeBlock
-                language={"php"}
-                content={`<?php
-
-declare(strict_types=1);
-
-use Lion\\Request\\Request;
-
-Request::header('Access-Control-Allow-Origin', '*');
-
-Request::header('Content-Type', 'application/json; charset=UTF-8');
 `}
               />
             </Fragment>
@@ -805,7 +779,7 @@ declare(strict_types=1);
 
 use Lion\\Request\\Response;
 
-$response = (new Response())
+$response = new Response()
     ->error('hello world');
 
 var_dump($response);
@@ -863,7 +837,7 @@ declare(strict_types=1);
 
 use Lion\\Request\\Response;
 
-$response = (new Response())
+$response = new Response()
     ->info('hello world');
 
 var_dump($response);
@@ -893,7 +867,7 @@ declare(strict_types=1);
 use Lion\\Request\\Response;
 use Lion\\Request\\Status;
 
-$response = (new Response())
+$response = new Response()
     ->response(Status::SUCCESS, 'hello world');
 
 var_dump($response);
@@ -922,7 +896,7 @@ declare(strict_types=1);
 
 use Lion\\Request\\Response;
 
-$response = (new Response())
+$response = new Response()
     ->success('hello world');
 
 var_dump($response);
@@ -951,7 +925,7 @@ declare(strict_types=1);
 
 use Lion\\Request\\Response;
 
-$response = (new Response())
+$response = new Response()
     ->warning('hello world');
 
 var_dump($response);

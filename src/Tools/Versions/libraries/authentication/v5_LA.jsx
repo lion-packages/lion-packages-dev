@@ -57,32 +57,6 @@ export default function v5_LA() {
       name: "Auth2FA::class",
       type: "sub_modules",
       list: {
-        init: {
-          name: "init",
-          code: (
-            <Fragment>
-              <LibraryTitle className="Auth2FA" methodName="init" />
-
-              <Description
-                description={
-                  "The init method allows initializing the Auth2FA class."
-                }
-              />
-
-              <CodeBlock
-                language="php"
-                content={`<?php
-
-declare(strict_types=1);
-
-use Lion\\Authentication\\Auth2FA;
-
-Auth2FA::init();
-                  `}
-              />
-            </Fragment>
-          ),
-        },
         qr: {
           name: "qr",
           code: (
@@ -103,7 +77,7 @@ declare(strict_types=1);
 
 use Lion\\Authentication\\Auth2FA;
 
-Auth2FA::init()
+new Auth2FA()
     ->qr('company_name', 'company_email');
 `}
               />
@@ -116,7 +90,7 @@ declare(strict_types=1);
 
 use Lion\\Authentication\\Auth2FA;
 
-Auth2FA::init()
+new Auth2FA()
     ->qr('company_name', 'company_email', 200); // default size of 400
 `}
               />
@@ -143,7 +117,7 @@ declare(strict_types=1);
 
 use Lion\\Authentication\\Auth2FA;
 
-Auth2FA::init()
+new Auth2FA()
     ->verify('secret_key', 'secret_code');
 `}
               />

@@ -448,10 +448,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Lion\\Database\\Drivers\\${driver};
 
 $user = ${driver}::connection('local')
-->table('users')
-->select()
-->where()->equalTo('idusers', 1)
-->get();
+    ->table('users')
+    ->select()
+    ->where()->equalTo('idusers', 1)
+    ->get();
 
 var_dump($user);
 `}
@@ -520,6 +520,95 @@ $response = ${driver}::connection('local')
     ->execute();
 
 var_dump($response);
+`}
+              />
+            </Fragment>
+          ),
+        },
+      },
+    },
+    GetQueryStringInterface: {
+      shared: ["MySQL", "PostgreSQL", "SQLite"],
+      methods: {
+        "get-query-string": {
+          name: "getQueryString",
+          code: (
+            <Fragment>
+              <LibraryTitle className={driver} methodName={"getQueryString"} />
+
+              <Description
+                description={
+                  "Generic function to obtain information about the current sentence"
+                }
+              />
+
+              <PhpCodeBlock
+                content={`<?php
+
+declare(strict_types=1);
+
+namespace Lion\\Database\\Interface;
+
+use stdClass;
+
+/**
+ * Generic function to obtain information about the current sentence
+ *
+ * @package Lion\\Database\\Interface
+ */
+interface GetQueryStringInterface
+{
+    /**
+     * Gets an object with the current statement
+     *
+     * @return stdClass
+     */
+    public static function getQueryString(): stdClass;
+}
+`}
+              />
+
+              <Example
+                number={1}
+                language={"php"}
+                content={`<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Lion\\Database\\Drivers\\${driver};
+
+$user = ${driver}::connection('local')
+    ->table('users')
+    ->select()
+    ->where()->greaterThan('idusers', 1)
+    ->getQueryString();
+
+var_dump($user);
+`}
+              />
+
+<Example
+                number={2}
+                language={"php"}
+                content={`<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Lion\\Database\\Drivers\\${driver};
+
+$user = ${driver}::connection('local')
+    ->table('users')
+    ->insert([
+        'users_name' => 'Sergio',
+        'users_email' => 'XxJd5@example.com',
+    ])
+    ->getQueryString();
+
+var_dump($user);
 `}
               />
             </Fragment>
@@ -651,10 +740,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Lion\\Database\\Drivers\\${driver};
 
 $user = ${driver}::connection('local')
-->table('users')
-->select()
-->where()->greaterThanOrEqualTo('idusers', 1)
-->getAll();
+    ->table('users')
+    ->select()
+    ->where()->greaterThanOrEqualTo('idusers', 1)
+    ->getAll();
 
 var_dump($user);
 `}
@@ -714,13 +803,13 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Lion\\Database\\Drivers\\${driver} as DB;
 
 $response = ${driver}::connection('local')
-->table('users')
-->insert([
-    'users_name' => 'root',
-    'users_date' => '2025-03-11',
-    'users_phone' => '...',
-])
-->execute();
+    ->table('users')
+    ->insert([
+        'users_name' => 'root',
+        'users_date' => '2025-03-11',
+        'users_phone' => '...',
+    ])
+    ->execute();
 
 var_dump($response);
 `}
@@ -782,10 +871,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Lion\\Database\\Drivers\\${driver};
 
 $user = ${driver}::connection('local')
-->table('users')
-->select()
-->where()->lessThan('idusers', 100)
-->getAll();
+    ->table('users')
+    ->select()
+    ->where()->lessThan('idusers', 100)
+    ->getAll();
 
 var_dump($user);
 `}

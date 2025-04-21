@@ -27,6 +27,7 @@ function LibraryContent() {
                     title={`lion/${library}`}
                     description={libraries[library].description}
                     uri={`/docs/library/${library}/${version}/getting-started/about-as`}
+                    support={libraries[library].support}
                     textColor={{
                       title: "title-card-link-2",
                       description: "text-white",

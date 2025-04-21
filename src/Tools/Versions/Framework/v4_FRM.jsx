@@ -2208,8 +2208,8 @@ declare(strict_types=1);
 
 namespace App\\Html;
 
-use Lion\\Bundle\\Helpers\\Commands\\Html;
 use Lion\\Bundle\\Interface\\HtmlInterface;
+use Lion\\Bundle\\Support\\Html;
 
 /**
  * Define an HTML template
@@ -4099,7 +4099,17 @@ Request::header('Content-Type', 'application/json; charset=UTF-8');
 use Lion\\Bundle\\Helpers\\Commands\\Schedule\\Task;
 use Lion\\Bundle\\Helpers\\Commands\\Schedule\\TaskQueue;
 
-ew TaskQueue()->push(
+$taskQueue = new TaskQueue([
+    'scheme' => 'tcp',
+    'host' => 'localhost',
+    'port' => 6379,
+    'parameters' => [
+        'password' => 'lion',
+        'database' => TaskQueue::LION_DATABASE,
+    ],
+]);
+
+$taskQueue->push(
     new Task(AccountService::class, 'myMethod', [
         'account' => fake()->email(),
         'code' => fake()->numerify('######'),

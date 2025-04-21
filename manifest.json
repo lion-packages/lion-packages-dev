@@ -1,6 +1,6 @@
 {
   "name": "Lion-Packages",
-  "short_name": "LP",
+  "short_name": "Lion-Packages",
   "start_url": "https://dev.lion-packages.com/",
   "description": "Official client for the PHP documentation of Lion-Framework and other libraries",
   "background_color": "#111111",
@@ -9,9 +9,9 @@
   "orientation": "any",
   "icons": [
     {
-      "src": "/public/vite.svg",
+      "src": "/public/logo.png",
       "sizes": "36x36 48x48 57x57 60x60 72x72 76x76 96x96 114x114 120x120 128x128 144x144 152x152 180x180 192x192 256x256 384x384 512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     }
   ]

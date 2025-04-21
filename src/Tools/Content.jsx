@@ -79,6 +79,7 @@ export default function Content() {
     library: {
       authentication: {
         description: "Library to authenticate users in 2 steps.",
+        support: true,
         versions: {
           v5: v5_LA(),
           v4: v4_LA(),
@@ -90,6 +91,7 @@ export default function Content() {
       command: {
         description:
           "library created with the function of executing commands from PHP.",
+        support: true,
         versions: {
           v5: v5_CMD(),
           v4: v4_CMD(),
@@ -99,6 +101,7 @@ export default function Content() {
       database: {
         description:
           "Package responsible for generating and executing statements for databases (MySQL/PostgreSQL).",
+        support: true,
         versions: {
           v11: v11_LBD(),
           v10: v10_LBD(),
@@ -107,6 +110,7 @@ export default function Content() {
       },
       "dependency-injection": {
         description: "Container for dependency injection with DI-PHP.",
+        support: true,
         versions: {
           v4: v4_LDI(),
           v3: v3_LDI(),
@@ -116,6 +120,7 @@ export default function Content() {
       },
       exceptions: {
         description: "Handling exceptions and serializations.",
+        support: true,
         versions: {
           v2: v2_LE(),
           v1: v1_LE(),
@@ -124,6 +129,7 @@ export default function Content() {
       files: {
         description:
           "Library created with the function of working internal system files.",
+        support: true,
         versions: {
           v8: v8_LF(),
           v7: v7_LF(),
@@ -134,6 +140,7 @@ export default function Content() {
       },
       helpers: {
         description: "Library created to use helpers for strings and arrays",
+        support: true,
         versions: {
           v5: v5_LH(),
           v4: v4_LH(),
@@ -144,6 +151,7 @@ export default function Content() {
       mailer: {
         description:
           "Library created to facilitate sending email based on different services.",
+        support: true,
         versions: {
           v5: v5_LM(),
         },
@@ -151,6 +159,7 @@ export default function Content() {
       request: {
         description:
           "Library created to request input data and response requests.",
+        support: true,
         versions: {
           v7: v7_LR(),
           v6: v6_LR(),
@@ -160,6 +169,7 @@ export default function Content() {
       route: {
         description:
           "This library has quick router usage with regular expressions.",
+        support: true,
         versions: {
           v12: v12_LRT(),
           v11: v11_LRT(),
@@ -171,6 +181,7 @@ export default function Content() {
       security: {
         description:
           "Library created with the function of implementing AES and RSA Security functions for PHP, it also includes functions to create JWT.",
+        support: true,
         versions: {
           v11: v11_LS(),
           v10: v10_LS(),
@@ -181,6 +192,7 @@ export default function Content() {
       },
       spreadsheet: {
         description: "Library to facilitate the use of spreadsheet.",
+        support: true,
         versions: {
           v4: v4_LSP(),
           v3: v3_LSP(),
@@ -191,7 +203,8 @@ export default function Content() {
       test: {
         description:
           "library to implement testing with helpers that allow easy testing with PHPUnit.",
-        versions: {
+          support: true,
+          versions: {
           v3: v3_LT(),
           v2: v2_LT(),
           v1: v1_LT(),

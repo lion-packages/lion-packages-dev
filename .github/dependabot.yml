@@ -1,10 +1,9 @@
 version: 2
 updates:
-  - package-ecosystem: "composer"
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
       time: "05:15"
-      days:
-        - monday
-        - wednesday
+      timezone: "America/Bogota"
+    rebase-strategy: "auto"

@@ -9,6 +9,8 @@ export default defineConfig({
         alias: {
             '@': path.resolve(__dirname, './src'),
             '@assets': path.resolve(__dirname, './src/assets'),
+            '@hooks': path.resolve(__dirname, './src/hooks'),
+            '@tools': path.resolve(__dirname, './src/Tools'),
         }
     },
     server: {

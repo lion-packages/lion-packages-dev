@@ -1,14 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Col,
-  Container,
-  Form,
-  ListGroup,
-  Offcanvas,
-  Row,
-} from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import { Button, Col, Container, Form, ListGroup, Offcanvas, Row } from "react-bootstrap";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import Content from "../../Tools/Content";
 import SelectVersion from "./SelectVersion";
@@ -27,7 +18,7 @@ export default function AddTabs() {
   };
 
   const getContent = () => {
-    let content = null;
+    let content;
 
     if (null === library) {
       content = Content().framework.versions[item_version].docs;
@@ -38,66 +29,44 @@ export default function AddTabs() {
     return content;
   };
 
-  const filterItems = (content) => {
-    return Object.entries(content).filter(([index, item]) =>
-      item.name.toLowerCase().includes(filter_search.toLowerCase())
-    );
-  };
-
   const ListItems = () => {
     return (
-      <ListGroup>
+      <ListGroup as={'ol'} numbered>
         {Object.entries(getContent()).map(([tabName, tabObject]) => (
-          <ListGroup.Item
-            action
-            variant={"dark"}
-            className={"border-0"}
-            key={tabName}
-            onClick={() => {
-              scrollToTop();
+            <ListGroup.Item
+                as="li"
+                variant={"dark"}
+                className={"d-flex justify-content-between align-items-start border-0"}
+                key={tabName}
+            >
+                <div className="ms-2 me-auto w-100">
+                    <div className="fw-bold mb-2">{tabObject.name}</div>
 
-              const firstItem = Object.entries(tabObject.list).shift().shift();
+                    <div className="d-flex flex-column">
+                        {Object.entries(tabObject.list).map(([tabMethod, tabMethodObject]) => (
+                            <span
+                                key={tabMethod}
+                                role={'button'}
+                                className={'text-lion-orange mb-1 p-0'}
+                                onClick={() => {
+                                    setShow(false);
 
-              navigate(
-                library === null
-                  ? `/docs/framework/${item_version}/${tabName}/${firstItem}`
-                  : `/docs/library/${library}/${item_version}/${tabName}/${firstItem}`
-              );
-            }}
-          >
-            {tabObject.name}
-          </ListGroup.Item>
+                                    scrollToTop();
+
+                                    navigate(
+                                        library === null
+                                            ? `/docs/framework/${item_version}/${tabName}/${tabMethod}`
+                                            : `/docs/library/${library}/${item_version}/${tabName}/${tabMethod}`
+                                    );
+                                }}
+                            >{tabMethodObject.name}</span>
+                        ))}
+                    </div>
+                </div>
+            </ListGroup.Item>
         ))}
       </ListGroup>
     );
-  };
-
-  const ListMethodsItems = () => {
-    const content = getContent();
-
-    if (!content[tab] || !content[tab].list) {
-      return [];
-    }
-
-    return filterItems(content[tab].list).map((methods) => (
-      <LinkContainer
-        key={methods[0]}
-        to={
-          library === null
-            ? `/docs/framework/${item_version}/${tab}/${methods[0]}`
-            : `/docs/library/${library}/${item_version}/${tab}/${methods[0]}`
-        }
-      >
-        <ListGroup.Item
-          action
-          variant={"dark"}
-          className={"p-1"}
-          onClick={() => scrollToTop()}
-        >
-          <span className="text-lion-orange">{methods[1].name}</span>
-        </ListGroup.Item>
-      </LinkContainer>
-    ));
   };
 
   useEffect(() => {
@@ -113,21 +82,15 @@ export default function AddTabs() {
       <Row>
         <Col xs={12} sm={12} md={12} lg={12} xl={3} xxl={3}>
           <div className="d-xl-none">
-            <div className="mb-3">
-              <Button
-                variant="dark-gradient"
-                className="me-3"
-                onClick={() => setShow(true)}
-              >
-                <i className="bi bi-list"></i>
-              </Button>
+            <Button variant="orange" onClick={() => setShow(true)}>
+                <i className="bi bi-list text-light"></i>
+            </Button>
 
-              <hr />
-            </div>
+            <hr />
 
             <Offcanvas
               placement="start"
-              className="bg-dark-logo text-white"
+              className="bg-lion-dark text-white"
               show={show}
               onHide={() => setShow(false)}
             >
@@ -153,36 +116,16 @@ export default function AddTabs() {
             </Offcanvas>
           </div>
 
-          <div className={"sticky-top d-none d-xl-block"}>
-            <div className="sticky-top bg-dark-logo py-3">
+          <div className={"vh-100 d-none d-xl-block overflow-auto"}>
+            <div className="bg-dark-logo py-3">
               <SelectVersion />
             </div>
 
-            <div className="vh-100 overflow-y-scroll">
               <ListItems />
-            </div>
           </div>
         </Col>
 
-        <Col xs={12} sm={12} md={12} lg={12} xl={3} xxl={3}>
-          <div className={"sticky-top d-none d-xl-block"}>
-            <div className="sticky-top bg-dark-logo py-3">
-              <Form.Control
-                type="search"
-                className="form-control-dark"
-                placeholder="Search..."
-                value={filter_search}
-                onChange={(e) => setFilter_search(e.target.value)}
-              />
-            </div>
-
-            <div className="vh-100 overflow-y-scroll">
-              <ListMethodsItems />
-            </div>
-          </div>
-        </Col>
-
-        <Col xs={12} sm={12} md={12} lg={12} xl={6} xxl={6}>
+        <Col xs={12} sm={12} md={12} lg={12} xl={9} xxl={9}>
           <Outlet />
         </Col>
       </Row>

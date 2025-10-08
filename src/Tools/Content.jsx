@@ -1,5 +1,4 @@
 import v1_LA from "./Versions/libraries/authentication/v1_LA";
-import v1_CMMD from "./Versions/Commands/v1_CMMD";
 import v3_CMD from "./Versions/libraries/command/v3_CMD";
 import v8_LBD from "./Versions/libraries/database/v8_LDB";
 import v1_LDI from "./Versions/libraries/dependency-injection/v1_LDI";
@@ -11,11 +10,7 @@ import v8_LRT from "./Versions/libraries/route/v8_LRT";
 import v7_LS from "./Versions/libraries/security/v7_LS";
 import v1_LSP from "./Versions/libraries/spreadsheet/v1_LSP";
 import v1_LT from "./Versions/libraries/test/v1_LT";
-import v2_FRM from "./Versions/Framework/v2_FRM";
-import v2_CMMD from "./Versions/Commands/V2_CMMD";
 import v3_LH from "./Versions/libraries/helpers/v3_LH";
-import v3_FRM from "./Versions/Framework/v3_FRM";
-import v3_CMMD from "./Versions/Commands/V3_CMMD";
 import v9_LRT from "./Versions/libraries/route/v9_LRT";
 import v10_LRT from "./Versions/libraries/route/v10_LRT";
 import v11_LRT from "./Versions/libraries/route/v11_LRT";
@@ -60,14 +55,6 @@ export default function Content() {
         v4: {
           docs: v4_FRM(),
           commands: v4_CMMD(),
-        },
-        v3: {
-          docs: v3_FRM(),
-          commands: v3_CMMD(),
-        },
-        v2: {
-          docs: v2_FRM(),
-          commands: v2_CMMD(),
         },
       },
     },

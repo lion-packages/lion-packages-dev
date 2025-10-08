@@ -1,9 +1,9 @@
 export default function StandardsRecomendations() {
   return (
     <div className="mb-3">
-      <h5 className="mb-3">PHP FIG: PHP Standards Recommendations</h5>
+      <h5 className="mb-3 text-light">PHP FIG: PHP Standards Recommendations</h5>
 
-      <p>
+      <p className={'text-light'}>
         The PSR (PHP Standards Recommendations) are a series of recommendations
         and standards proposed by the PHP-FIG (PHP Framework Interoperability
         Group) to promote interoperability between PHP frameworks and
@@ -12,14 +12,14 @@ export default function StandardsRecomendations() {
         autoloading, component interfaces, among others.
       </p>
 
-      <p>
+      <p className={'text-light'}>
         The main goal of the PSR is to establish a set of common standards that
         facilitate the integration and reuse of code across different PHP
         projects and frameworks. Some of the most well-known and widely used
         PSRs include:
       </p>
 
-      <ul>
+      <ul className={'text-light'}>
         <li>
           <strong>PSR-1:</strong> Basic coding standards, which define the
           minimum requirements to ensure standardized PHP code.
@@ -47,23 +47,23 @@ export default function StandardsRecomendations() {
         </li>
       </ul>
 
-      <p>
+      <p className={'text-light'}>
         These standards are not mandatory, but their adoption can significantly
         improve code quality and maintainability, as well as facilitate
         collaboration between developers working with different tools and
         frameworks.
       </p>
 
-      <p>
+      <p className={'text-light'}>
         For more information on the accepted PSRs, you can visit the following
         link:{" "}
         <a
           href="https://www.php-fig.org/psr/"
-          className="text-decoration-none"
+          className="text-lion-orange text-decoration-none"
           target="_blank"
         >
           PHP-FIG PSR
-        </a>
+        </a>.
       </p>
     </div>
   );

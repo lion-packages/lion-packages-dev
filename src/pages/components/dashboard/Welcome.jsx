@@ -1,18 +1,10 @@
-import logo from "@assets/lion-packages.svg";
+import frameworkLts from "@hooks/versionLts";
+import { Link } from "react-router-dom";
 
 export default function Welcome() {
   return (
     <main>
       <section id="hero">
-        <a href="https://www.lion-packages.com" target="_blank">
-          <img
-            src={logo}
-            alt="Lion-Packages Homepage"
-            className="img-fluid"
-            style={{ height: "70px", width: "auto" }}
-          />
-        </a>
-
         <h1 className="text-light">
           Build with PHP and take your application to the next level.
         </h1>
@@ -23,9 +15,12 @@ export default function Welcome() {
         </p>
 
         <div className="my-3" id="links">
-          <a href={"#"} className="button">
+          <Link
+            to={`/docs/framework/${frameworkLts}/getting-started/about-as`}
+            className="button"
+          >
             Read the docs
-          </a>
+          </Link>
         </div>
       </section>
     </main>

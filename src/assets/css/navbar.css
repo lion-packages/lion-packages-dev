@@ -1,3 +1,8 @@
+.navbar-blur {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
 .dropdown-menu-blur {
   --bs-dropdown-color: #dee2e6;
   --bs-dropdown-bg: rgba(17, 17, 17, 0.8);

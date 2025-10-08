@@ -1,9 +1,10 @@
-import { FaDocker, FaReact, FaVuejs } from "react-icons/fa";
+import { FaDocker, FaReact, FaVuejs, FaAndroid } from "react-icons/fa";
 import { GrMysql } from "react-icons/gr";
 import { RiRemixRunFill, RiTestTubeFill } from "react-icons/ri";
 import {
   SiAngular,
   SiAstro,
+  SiCapacitor,
   SiJsonwebtokens,
   SiMongodb,
   SiPostgresql,
@@ -11,14 +12,15 @@ import {
   SiQwik,
   SiRedis,
   SiSvelte,
-  SiVitest,
+  SiVitest
 } from "react-icons/si";
+
 import { TbAuth2Fa, TbBrandSolidjs } from "react-icons/tb";
 
 export const technologies = [
   [
     null,
-    null,
+    SiCapacitor,
     SiVitest,
     FaReact,
     GrMysql,
@@ -32,6 +34,7 @@ export const technologies = [
   ],
   [
     null,
+    FaAndroid,
     SiRedis,
     SiSvelte,
     TbBrandSolidjs,
@@ -41,7 +44,6 @@ export const technologies = [
     TbAuth2Fa,
     SiMongodb,
     SiJsonwebtokens,
-    null,
     null,
   ],
 ];

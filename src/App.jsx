@@ -9,11 +9,14 @@ import LinuxConfiguration from "./pages/LinuxConfiguration";
 import NotFound from "./pages/NotFound";
 import Standards from "./pages/Standards";
 import FooterNavigation from "./pages/components/FooterNavigation";
+import NavbarNavigation from "./pages/components/NavbarNavigation";
 
 export default function App() {
   return (
     <div id="container">
       <img id="background" alt={"Lion-Packages"} src={background} />
+
+      <NavbarNavigation />
 
       <Routes>
         <Route path="*" element={<NotFound />} />

@@ -1,12 +1,4 @@
-import {
-  Alert,
-  Badge,
-  Col,
-  ListGroup,
-  ListGroupItem,
-  Row,
-  Table,
-} from "react-bootstrap";
+import { Alert, Badge, Col, ListGroup, ListGroupItem, Row, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ListCommandsNew from "../../../pages/components/ListCommandsNew";
 import CodeBlock from "../../../pages/components/CodeBlock";
@@ -15,7 +7,6 @@ import { Fragment } from "react";
 import Description from "../../../pages/components/Description";
 import ExampleTitle from "../../../pages/components/ExampleTitle";
 import Notes from "../../../pages/components/Notes";
-import MarginBottom2 from "../../../pages/components/MarginBottom2";
 import SupportVersion from "../../../pages/components/SupportVersion";
 import YoutubeVideo from "../../../pages/components/YoutubeVideo";
 
@@ -34,20 +25,20 @@ export default function v4_FRM() {
               <Notes />
 
               <Fragment>
-                <p className="fs-6">
+                <p className="fs-6 text-light">
                   Lion-Framework can also serve as an API backend for a
                   JavaScript single page application or a mobile application.
                   For example, you can use Lion-Framework as an API backend for
                   your ReactJS app or Kotlin app.
                 </p>
 
-                <p className="fs-6">
+                <p className="fs-6 text-light">
                   You can use Lion-Framework to provide authentication and data
                   storage/retrieval for your application, while taking advantage
                   of Lion-Framework services such as emails, databases and more.
                 </p>
 
-                <p className="fs-6">
+                <p className="fs-6 text-light">
                   To install <strong>Lion-Framework</strong> and libraries you
                   must have{" "}
                   <a href="https://getcomposer.org" target={"_blank"}>
@@ -581,7 +572,7 @@ Route::controller(UsersController::class, function (): void {
                 <hr />
               </div>
 
-              <p className="fs-6">
+              <p className="fs-6 text-light">
                 To view the available routes, start the local server first, run
                 the <Badge bg="secondary">php lion serve</Badge> command, and
                 then view the routes.
@@ -607,7 +598,7 @@ Route::controller(UsersController::class, function (): void {
             <Fragment>
               <Title title={"Postman Collections"} />
 
-              <p className="fs-6">
+              <p className="fs-6 text-light">
                 To export the available routes you must run the local server and
                 execute the export, after this you can observe the collections
                 in <Badge bg="secondary">storage/postman/</Badge>.
@@ -1699,6 +1690,20 @@ class ExampleMigration implements StoreProcedureInterface
             </Fragment>
           ),
         },
+        drop: {
+          name: "Drop Migrations",
+          code: (
+            <Fragment>
+              <Title title={"Drop Migrations"} />
+
+              <Description
+                description={"Drop the database and recreate it empty."}
+              />
+
+              <CodeBlock language={"bash"} content={"php lion migrate:drop"} />
+            </Fragment>
+          ),
+        },
         run: {
           name: "Run Migration",
           code: (
@@ -2383,23 +2388,27 @@ declare(strict_types=1);
 
 namespace App\\Http\\Middleware;
 
-use Exception;
+use Lion\\Bundle\\Exceptions\\MiddlewareException;
+use Lion\\Request\\Http;
 use Lion\\Route\\Interface\\MiddlewareInterface;
 
 /**
- * Filter the headers
- *
- * @package App\\Http\\Middleware
+ * Filter the headers.
  */
 class HeaderMiddleware implements MiddlewareInterface
 {
+    /**
+     * Middleware name.
+     */
+    public const string NAME = '';
+
     /**
      * {@inheritDoc}
      */
     public function process(): void
     {
-        if (!isset($_SERVER['AUTHORIZATION'])) {
-            throw new Exception('Unauthorized');
+        if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            throw new MiddlewareException('Unauthorized', Http::INTERNAL_SERVER_ERROR);
         }
     }
 }`}
@@ -2442,7 +2451,7 @@ use Lion\\Bundle\\Helpers\\Http\\Routes;
  */
 
 Routes::setMiddleware([
-    'header' => HeaderMiddleware::class,
+    HeaderMiddleware::NAME => HeaderMiddleware::class,
 ]);
 `}
               />
@@ -2801,29 +2810,31 @@ class ExampleSocket implements MessageComponentInterface
                   content={`<?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    defaultTestSuite="All-Test"
-    testdox="false"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.0/phpunit.xsd"
+    backupGlobals="false"
+    backupStaticProperties="false"
+    bootstrap="config/bootstrap.test.php"
+    cacheDirectory="tests/build/cache"
     cacheResult="true"
     colors="true"
     columns="80"
-    backupGlobals="false"
-    processIsolation="false"
-    stopOnDefect="true"
-    stopOnError="true"
-    stopOnFailure="true"
-    stopOnWarning="true"
-    bootstrap="tests/bootstrap.php"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.1/phpunit.xsd"
-    backupStaticProperties="false"
+    defaultTestSuite="All-Test"
     displayDetailsOnIncompleteTests="true"
     displayDetailsOnSkippedTests="true"
     displayDetailsOnTestsThatTriggerDeprecations="true"
     displayDetailsOnTestsThatTriggerErrors="true"
     displayDetailsOnTestsThatTriggerNotices="true"
     displayDetailsOnTestsThatTriggerWarnings="true"
+    processIsolation="false"
+    stopOnDefect="true"
+    stopOnError="true"
+    stopOnFailure="true"
+    stopOnWarning="true"
+    testdox="false"
 >
     <php>
         <env name="APP_ENV" value="testing" />
+
         <ini name="date.timezone" value="America/Bogota" />
         <ini name="intl.default_locale" value="C.UTF-8" />
         <ini name="memory_limit" value="2048M" />
@@ -2837,6 +2848,7 @@ class ExampleSocket implements MessageComponentInterface
 
         <exclude>
             <directory suffix=".php">app/Html</directory>
+            <directory suffix=".php">app/Interfaces</directory>
             <directory suffix=".php">app/Rules</directory>
             <directory suffix=".php">app/Sockets</directory>
         </exclude>
@@ -2844,8 +2856,7 @@ class ExampleSocket implements MessageComponentInterface
 
     <testsuites>
         <testsuite name="All-Test">
-            <directory suffix=".php">tests/App</directory>
-            <directory suffix=".php">tests/Database</directory>
+            <directory suffix=".php">tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
@@ -3087,6 +3098,70 @@ class ExampleExceptionTest extends Test
 `}
                 />
               </Fragment>
+
+                <Fragment>
+                    <ExampleTitle number={4} />
+
+                    <Description description={'An example test of a controller running migrations on an isolated database.'} />
+
+                    <CodeBlock
+                        language={"php"}
+                        content={`<?php
+
+declare(strict_types=1);
+
+namespace Tests\\Global\\App\\Http\\Controllers\\LionDatabase\\MySQL;
+
+use Lion\\Bundle\\Test\\Test;
+use PHPUnit\\Framework\\Attributes\\RunInSeparateProcess;
+use PHPUnit\\Framework\\Attributes\\Test as Testing;
+
+class ExampleControllerTest extends Test
+{
+    #[Testing]
+    #[RunInSeparateProcess]
+    public function example(): void
+    {
+        $this->runInSeparateDatabase(function (): void {
+            // ...
+        });
+    }
+}
+`}
+                    />
+                </Fragment>
+
+                <Fragment>
+                    <ExampleTitle number={5} />
+
+                    <Description description={'An example of testing a controller that runs migrations with isolated environment variables.'} />
+
+                    <CodeBlock
+                        language={"php"}
+                        content={`<?php
+
+declare(strict_types=1);
+
+namespace Tests\\Global\\App\\Http\\Controllers\\LionDatabase\\MySQL;
+
+use Lion\\Bundle\\Test\\Test;
+use PHPUnit\\Framework\\Attributes\\RunInSeparateProcess;
+use PHPUnit\\Framework\\Attributes\\Test as Testing;
+
+class ExampleControllerTest extends Test
+{
+    #[Testing]
+    #[RunInSeparateProcess]
+    public function example(): void
+    {
+        $this->runInSeparateEnvironment(function (): void {
+            // ...
+        });
+    }
+}
+`}
+                    />
+                </Fragment>
             </Fragment>
           ),
         },
@@ -3100,6 +3175,8 @@ class ExampleExceptionTest extends Test
                 <Description description={"Run all tests via command line."} />
 
                 <CodeBlock language={"bash"} content={"php lion test"} />
+
+                <CodeBlock language={"bash"} content={"php lion test --parallel"} />
 
                 <CodeBlock
                   language={"bash"}
@@ -3120,6 +3197,11 @@ class ExampleExceptionTest extends Test
                 <CodeBlock
                   language={"bash"}
                   content={"php lion test --report"}
+                />
+
+                <CodeBlock
+                  language={"bash"}
+                  content={"php lion test --parallel --report"}
                 />
 
                 <CodeBlock
@@ -3279,8 +3361,8 @@ Request::header('Content-Type', 'application/json; charset=UTF-8');
         },
       },
     },
-    schedule: {
-      name: "Schedule",
+    queue: {
+      name: "Queue",
       type: "sub_modules",
       list: {
         "queued-tasks": {
@@ -3301,7 +3383,7 @@ Request::header('Content-Type', 'application/json; charset=UTF-8');
                         className="text-decoration-none"
                       >
                         Lion-Dependency-Injection
-                      </Link>
+                      </Link>.
                     </Fragment>
                   }
                 />

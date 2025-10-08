@@ -8,51 +8,54 @@ export default function DashboardRoutesAndApiAndTest() {
   return (
     <div className="mb-5">
       <Row className="g-3">
-        <Col xs={12} sm={12} md={5} lg={4} xl={3} className="text-white">
-          <div className="rounded bg-transparent-blur border-lion-light p-4 h-100">
-            <MdHttp size={"4em"} title="HTTP" className="float-start me-2" />
+        <Col xs={12} sm={12} md={5} lg={4} xl={3}>
+          <div className="rounded shadow border-lion-light p-4 h-100">
+            <MdHttp
+              size={"4em"}
+              title="HTTP"
+              className="text-light float-start me-2"
+            />
 
-            <hr />
+            <hr className="text-light" />
 
-            <Fragment>
-              <h5 className="text-shadow">{"Routes"}</h5>
+            <h5 className="text-light">{"Routes"}</h5>
 
-              <p className="text-secondary text-shadow">
-                Create all the routes you want for your web application, protect
-                your routes through Middleware, export collections to POSTMAN or
-                call your API from (ReactJS - VueJS - Kotlin).
-              </p>
-            </Fragment>
+            <p className="text-light">
+              Create all the routes you want for your web application, protect
+              your routes through Middleware, export collections to POSTMAN or
+              call your API from (ReactJS - VueJS - Kotlin).
+            </p>
           </div>
         </Col>
 
-        <Col xs={12} sm={12} md={5} lg={4} xl={3} className="text-white">
-          <div className="rounded bg-transparent-blur border-lion-light p-4 h-100">
-            <hr />
+        <Col xs={12} sm={12} md={5} lg={4} xl={3}>
+          <div className="rounded shadow border-lion-light p-4 h-100">
+            <hr className="text-light" />
 
-            <Fragment>
-              <h5 className="text-shadow">{"Api"}</h5>
+            <h5 className="text-light">{"Api"}</h5>
 
-              <p className="text-secondary text-shadow">
-                Build complete and robust applications in PHP using
-                Lion-Framework and ReactJS. Or, let Lion-Framework work as a
-                robust back-end API for your ViteJS app, mobile app, or other
-                interface.
-              </p>
-            </Fragment>
+            <p className="text-light">
+              Build complete and robust applications in PHP using Lion-Framework
+              and ReactJS. Or, let Lion-Framework work as a robust back-end API
+              for your ViteJS app, mobile app, or other interface.
+            </p>
           </div>
         </Col>
 
-        <Col xs={12} sm={12} md={7} lg={4} xl={6} className="text-white">
-          <div className="p-4 h-100 bg-transparent-blur rounded border-lion-light">
-            <RiTestTubeFill size={"4em"} title="Test" className="float-end" />
+        <Col xs={12} sm={12} md={7} lg={4} xl={6}>
+          <div className="p-4 h-100 rounded shadow border-lion-light">
+            <RiTestTubeFill
+              size={"4em"}
+              title="Test"
+              className="float-end text-light"
+            />
 
-            <hr />
+            <hr className="text-light" />
 
             <Fragment>
-              <h5 className="text-shadow">{"Testing"}</h5>
+              <h5 className="text-light">{"Testing"}</h5>
 
-              <p className="text-secondary text-shadow">
+              <p className="text-light mb-3">
                 Testing Lion-Framework integrates unit tests internally with
                 PHPUnit, feel free to create the necessary tests to check the
                 proper functioning of your web app.

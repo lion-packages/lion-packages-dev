@@ -1,30 +1,30 @@
-import "./assets/css/index.css";
-import "./assets/css/navbar.css";
-
-import { Routes, Route } from "react-router-dom";
-import NavbarNavigation from "./pages/components/NavbarNavigation";
+import background from "@assets/background.svg";
+import "@assets/css/index.css";
+import { Route, Routes } from "react-router-dom";
 import AddTabs from "./pages/components/AddTabs";
-import NotFound from "./pages/NotFound";
+import ContentView from "./pages/ContentView";
 import DashboardContent from "./pages/DashboardContent";
 import LibraryContent from "./pages/LibraryContent";
-import FooterNavigation from "./pages/components/FooterNavigation";
-import ContentView from "./pages/ContentView";
 import LinuxConfiguration from "./pages/LinuxConfiguration";
+import NotFound from "./pages/NotFound";
 import Standards from "./pages/Standards";
-import { Fragment } from "react";
+import FooterNavigation from "./pages/components/FooterNavigation";
 
-function App() {
+export default function App() {
   return (
-    <Fragment>
-      <NavbarNavigation />
+    <div id="container">
+      <img id="background" alt={"Lion-Packages"} src={background} />
 
       <Routes>
         <Route path="*" element={<NotFound />} />
+
         <Route path="/" element={<DashboardContent />} />
+
         <Route path="standards" element={<Standards />} />
+
         <Route path="linux-configuration" element={<LinuxConfiguration />} />
 
-        <Route path="docs/">
+        <Route path="docs">
           <Route path="framework">
             <Route path=":item_version/:tab" element={<AddTabs />}>
               <Route path=":code" element={<ContentView />} />
@@ -42,8 +42,6 @@ function App() {
       </Routes>
 
       <FooterNavigation />
-    </Fragment>
+    </div>
   );
 }
-
-export default App;

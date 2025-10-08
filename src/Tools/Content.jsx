@@ -1,4 +1,3 @@
-import v1_FRM from "./Versions/Framework/v1_FRM";
 import v1_LA from "./Versions/libraries/authentication/v1_LA";
 import v1_CMMD from "./Versions/Commands/v1_CMMD";
 import v3_CMD from "./Versions/libraries/command/v3_CMD";
@@ -69,10 +68,6 @@ export default function Content() {
         v2: {
           docs: v2_FRM(),
           commands: v2_CMMD(),
-        },
-        v1: {
-          docs: v1_FRM(),
-          commands: v1_CMMD(),
         },
       },
     },

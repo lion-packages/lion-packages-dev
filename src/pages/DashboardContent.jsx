@@ -1,44 +1,28 @@
-import "../assets/css/dashboard.css";
-
 import { Fragment } from "react";
 import { Container } from "react-bootstrap";
-import DashboardPresentation from "./components/dashboard/DashboardPresentation";
-import DashboardServerAndDocker from "./components/dashboard/DashboardServerAndDocker";
 import DashboardRoutesAndApiAndTest from "./components/dashboard/DashboardRoutesAndApiAndTest";
-import DashboardViteAndDatabase from "./components/dashboard/DashboardViteAndDatabase";
+import DashboardServerAndDocker from "./components/dashboard/DashboardServerAndDocker";
 import DashboardTaskInQueueAndCommands from "./components/dashboard/DashboardTaskInQueueAndCommands";
 import DashboardTecnologies from "./components/dashboard/DashboardTecnologies";
+import DashboardViteAndDatabase from "./components/dashboard/DashboardViteAndDatabase";
+import Welcome from "./components/dashboard/Welcome.jsx";
 
-function DashboardContent() {
+export default function DashboardContent() {
   return (
     <Fragment>
-      <div className="bg-blur-center-100 vh-100 py-5">
-        <DashboardPresentation />
-      </div>
+      <Welcome />
 
-      <div className="bg-blur-left-ellipse" id="initial-section">
-        <Container>
-          <DashboardServerAndDocker />
+      <Container>
+        <DashboardServerAndDocker />
 
-          <DashboardRoutesAndApiAndTest />
-        </Container>
-      </div>
+        <DashboardRoutesAndApiAndTest />
 
-      <div className="bg-blur-right-ellipse">
-        <Container>
-          <DashboardViteAndDatabase />
+        <DashboardViteAndDatabase />
 
-          <DashboardTaskInQueueAndCommands />
-        </Container>
-      </div>
+        <DashboardTaskInQueueAndCommands />
 
-      <div className="bg-blur-buttom-ellipse">
-        <Container>
-          <DashboardTecnologies />
-        </Container>
-      </div>
+        <DashboardTecnologies />
+      </Container>
     </Fragment>
   );
 }
-
-export default DashboardContent;

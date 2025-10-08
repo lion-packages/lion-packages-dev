@@ -1,27 +1,23 @@
+import "@assets/css/navbar.css";
+import logo from "@assets/lion-packages.svg";
+import { useState } from "react";
+import { Image } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { FaDiscord, FaGithub, FaLinkedin, FaYoutube } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
-import NavigationLinks from "../../Tools/NavigationLinks";
-import logo from "./../../assets/img/ico-trnasparent-orange.png";
-import { FaGithub, FaYoutube, FaLinkedin, FaDiscord } from "react-icons/fa";
-import { Image } from "react-bootstrap";
-import Content from "../../Tools/Content";
-import { useState } from "react";
-
-const key = Object.keys(Content().framework.versions).shift();
+import NavigationLinks from "@tools/NavigationLinks";
+import frameworkLts from "@hooks/versionLts";
 
 function NavbarNavigation() {
   const [expanded, setExpanded] = useState(false);
 
   const FrameworkLink = () => {
     return (
-      <LinkContainer to={`/docs/framework/${key}/getting-started/about-as`}>
-        <Nav.Link
-          className="fw-bold d-flex align-items-center justify-content-center"
-          onClick={() => setExpanded(!expanded)}
-        >
+      <LinkContainer to={`/docs/framework/${frameworkLts}/getting-started/about-as`}>
+        <Nav.Link className='fw-bold d-flex align-items-center justify-content-center'>
           Framework
         </Nav.Link>
       </LinkContainer>
@@ -31,21 +27,20 @@ function NavbarNavigation() {
   return (
     <Navbar
       expanded={expanded}
-      sticky={"top"}
-      variant={"dark"}
-      expand={"lg"}
-      className="p-0 navbar-blur"
-      style={{ "--bs-border-opacity": ".4" }}
+      variant={'dark'}
+      expand={'lg'}
+      className={'p-0 navbar-blur'}
+      style={{ '--bs-border-opacity': '.4' }}
     >
       <Container fluid>
-        <LinkContainer to="/">
+        <LinkContainer to='/'>
           <Navbar.Brand onClick={() => setExpanded(false)}>
-            <Image src={logo} width={55} className="img-fluid" />
+            <Image src={logo} width={200} className={'img-fluid'} />
           </Navbar.Brand>
         </LinkContainer>
 
         <Navbar.Toggle
-          aria-controls="basic-navbar-nav"
+          aria-controls={'basic-navbar-nav'}
           onClick={() => setExpanded(!expanded)}
         />
 
@@ -62,7 +57,6 @@ function NavbarNavigation() {
                 <LinkContainer to={link.url} key={index}>
                   <Nav.Link
                     className="fw-bold d-flex align-items-center justify-content-center"
-                    onClick={() => setExpanded(!expanded)}
                   >
                     {link.display_name}
                   </Nav.Link>
@@ -93,7 +87,7 @@ function NavbarNavigation() {
               className="text-center"
               target="_blank"
             >
-              <FaYoutube size={"1.8em"} className="text-danger" />
+              <FaYoutube size={"1.8em"} className="text-lion-orange" />
             </Nav.Link>
 
             <Nav.Link
@@ -103,7 +97,7 @@ function NavbarNavigation() {
               className="text-center"
               target="_blank"
             >
-              <FaLinkedin size={"1.8em"} className="text-primary" />
+              <FaLinkedin size={"1.8em"} className={'text-lion-orange'} />
             </Nav.Link>
 
             <Nav.Link
@@ -115,11 +109,11 @@ function NavbarNavigation() {
             </Nav.Link>
 
             <Nav.Link
-              href={"https://discord.gg/qNuJdfFf5j"}
+              href={"https://discord.gg/r8aNT8YtUy"}
               className="text-center"
               target="_blank"
             >
-              <FaDiscord size={"1.8em"} className="text-primary" />
+              <FaDiscord size={"1.8em"} className={'text-lion-orange'} />
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

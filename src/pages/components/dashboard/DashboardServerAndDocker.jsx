@@ -6,18 +6,18 @@ import CodeBlock from "../CodeBlock";
 export default function DashboardServerAndDocker() {
   return (
     <div className="mb-4">
-      <div className="text-center mb-5 text-white text-shadow">
-        <h2>Multiple Tools</h2>
+      <div className="text-center mb-5">
+        <h1 className="text-light">Multiple Tools</h1>
 
-        <p>
+        <p className="text-light">
           Lion-Framework allows you to carry out an entire development with
           simple tools
         </p>
       </div>
 
       <Row className="g-3">
-        <Col xs={12} sm={12} md={5} lg={4} xl={4} className="text-white">
-          <div className="rounded bg-transparent-blur border-lion-light p-4">
+        <Col xs={12} sm={12} md={5} lg={4} xl={4}>
+          <div className="rounded p-4 border-lion-light shadow">
             <div className="mb-3">
               <Placeholder animation="wave">
                 <Placeholder xs={10} className="text-lion-orange" size="lg" />
@@ -26,17 +26,17 @@ export default function DashboardServerAndDocker() {
               </Placeholder>
             </div>
 
-            <label className="text-shadow">
+            <label className="text-light">
               {"Lion-Framework ready in "}
               <span className="text-lion-orange">{"0.040 ms"}</span>
             </label>
 
-            <hr />
+            <hr className="text-light" />
 
             <Fragment>
-              <h5 className="text-shadow">{"Instant Server Start"}</h5>
+              <h5 className="text-light">{"Instant Server Start"}</h5>
 
-              <p className="text-secondary text-shadow">
+              <p className="text-light mb-3">
                 Start your server in a matter of milliseconds through the
                 terminal by running a single command.
               </p>
@@ -46,24 +46,28 @@ export default function DashboardServerAndDocker() {
           </div>
         </Col>
 
-        <Col xs={12} sm={12} md={7} lg={8} xl={8} className="text-white">
-          <div className="p-4 h-100 bg-transparent-blur rounded border-lion-light">
+        <Col xs={12} sm={12} md={7} lg={8} xl={8}>
+          <div className="p-4 h-100 rounded border-lion-light shadow">
             <div className="mb-3">
-              <FaDocker size={"4em"} title="Docker" className="me-3" />
+              <FaDocker
+                size={"4em"}
+                title="Docker"
+                className="me-3 text-light"
+              />
 
               <Placeholder animation="wave">
-                <Placeholder xs={7} className="text-lion-orange" size="lg" />
+                <Placeholder xs={10} className="text-lion-orange" size="lg" />
 
-                <Placeholder xs={6} className="text-lion-orange" size="lg" />
+                <Placeholder xs={8} className="text-lion-orange" size="lg" />
               </Placeholder>
             </div>
 
-            <hr />
+            <hr className="text-light" />
 
             <Fragment>
-              <h5 className="text-shadow">{"Docker"}</h5>
+              <h5 className="text-light">{"Docker"}</h5>
 
-              <p className="text-secondary text-shadow">
+              <p className="text-light">
                 Create Docker containers using Lion-Framework, where you can
                 work with MySQL, PostgreSQL and other databases.
               </p>

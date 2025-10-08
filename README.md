@@ -1,13 +1,13 @@
-
 <div align="center">
-<img src="public/logo.png" height="120px" width="auto" /> 
-<h2 style="font-size: 24px">
- Lion Framework
-</h2>
-<p>
-Boost your PHP development
-With the Lion-Framework
-</p>
+  <img width="1920" height="300" alt="presentation-lion-parking" src="https://github.com/user-attachments/assets/970a04d0-dc2a-4e38-9a96-1a00d04c3d2a">
+
+    <h2 style="font-size: 24px">Lion Framework</h2>
+
+    <p>
+        Boost your PHP development
+        With the Lion-Framework
+    </p>
+
 </div>
 
 <div align="center">
@@ -50,11 +50,13 @@ With the Lion-Framework
 </div>
 
 ## 🎯 Getting Started
+
 - [Main web.](https://lion-client.vercel.app/)
 - [Libraries documentation.](https://lion-client.vercel.app/libraries/content)
 - [Framework Documentacion](https://lion-client.vercel.app/framework/index/v15.4.1/install)
 
 ## 📖 Key Features
+
 Welcome to lion we are a website that documents all lion packages including the framework. Our purpose is to provide developers with a simpler environment for web development with PHP through a framework or lion packages.
 
 - 💡 Instant server start
@@ -74,5 +76,5 @@ Welcome to lion we are a website that documents all lion packages including the 
 </a>
 
 ## 🔑 License
-[**MIT**](https://github.com/Sleon4/web-documentation?tab=License-1-ov-file).
 
+[**MIT**](https://github.com/Sleon4/web-documentation?tab=License-1-ov-file).

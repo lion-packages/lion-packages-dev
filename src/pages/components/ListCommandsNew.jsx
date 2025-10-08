@@ -56,9 +56,9 @@ function ListCommandsNew() {
   return Content().framework.versions[item_version].commands.map(
     (item, index) => (
       <div className="mb-3" key={index}>
-        <h5 className="text-info">{item.group}</h5>
+        <h5 className="text-light">{item.group}</h5>
 
-        <hr className="border-info" />
+        <hr />
 
         <Row>
           {item.childs.map((child, childIndex) => (
@@ -71,7 +71,7 @@ function ListCommandsNew() {
                   <a
                     href={"#" + linkFormat(child.name)}
                     id={linkFormat(child.name)}
-                    className="text-lion-orange text-decoration-none"
+                    className="text-light text-decoration-none"
                   >
                     <i className="bi bi-terminal-fill me-3 h4"></i>
 

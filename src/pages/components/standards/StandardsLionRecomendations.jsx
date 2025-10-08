@@ -4,9 +4,9 @@ import CodeBlock from "../CodeBlock";
 export default function StandardsLionRecomendations() {
   return (
     <div className="mb-3">
-      <h5 className="mb-3">Lion-Packages</h5>
+      <h5 className="mb-3 text-light">Lion-Packages</h5>
 
-      <p>
+      <p className={'text-light'}>
         The "Lion-Packages" organization has established a standard for creating
         response objects in PHP to ensure consistent and clear HTTP responses
         throughout our application. This standard defines specific methods for
@@ -14,9 +14,9 @@ export default function StandardsLionRecomendations() {
         particular kind of response.
       </p>
 
-      <p>The standard consists of the following methods:</p>
+      <p className={'text-light'}>The standard consists of the following methods:</p>
 
-      <ul>
+      <ul className={'text-light'}>
         <li>
           <strong>Response Method: </strong>method allows you to generate a
           custom response object. This method accepts parameters for the status,
@@ -57,33 +57,11 @@ export default function StandardsLionRecomendations() {
         </li>
       </ul>
 
-      <p>
+      <p className={'text-light'}>
         In practice, these methods are used within controllers to generate
         response objects consistently. For example, to return a successful
         response, you would use:
       </p>
-
-      <CodeBlock
-        language="php"
-        content={`<?php
-
-declare(strict_types=1);
-
-use Lion\\Request\\Status;
-use Lion\\Request\\Http;
-use stdClass;
-
-/**
- * This is an example of a response object
- *
- * @return stdClass
- */
-public function example(): stdClass
-{
-    return response(Status::SUCCESS, 'OK', Http::OK);
-}
-`}
-      />
 
       <CodeBlock
         language="php"
@@ -106,14 +84,14 @@ public function example(): stdClass
 `}
       />
 
-      <p>
+      <p className={'text-light'}>
         When specifying the response code, the method will also update the HTTP
         response code accordingly, ensuring that the response object and HTTP
         status code are in sync. For more information about HTTP response
         statuses and codes, you can visit the following link:{" "}
-        <Link to={"/docs/library/content"} className="text-decoration-none">
+        <Link to={"/docs/library/content"} className="text-lion-orange text-decoration-none">
           Lion-Request
-        </Link>
+        </Link>.
       </p>
     </div>
   );

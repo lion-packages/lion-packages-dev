@@ -9,27 +9,31 @@ import { GrMysql } from "react-icons/gr";
 export default function DashboardViteAndDatabase() {
   return (
     <div className="mb-4">
-      <div className="text-center mb-5 text-white text-shadow">
-        <h2>Structure compatible with everything</h2>
+      <div className="text-center mb-5">
+        <h2 className="text-light">Structure compatible with everything</h2>
       </div>
 
       <Row className="g-3">
-        <Col xs={12} sm={12} md={5} lg={4} xl={4} className="text-white">
-          <div className="rounded bg-transparent-blur border-lion-light p-4">
+        <Col xs={12} sm={12} md={5} lg={4} xl={4}>
+          <div className="rounded shadow border-lion-light p-4">
             <div className="mb-3">
               <Placeholder animation="wave">
                 <Placeholder xs={10} className="text-lion-orange" size="lg" />
               </Placeholder>
             </div>
 
-            <SiVite size={"3.5em"} title="Vite" className="float-start me-3" />
+            <SiVite
+              size={"3.5em"}
+              title="Vite"
+              className="float-start me-3 text-light"
+            />
 
-            <hr />
+            <hr className="text-light" />
 
             <Fragment>
-              <h5 className="text-shadow">{"Vite"}</h5>
+              <h5 className="text-light">{"Vite"}</h5>
 
-              <p className="text-secondary text-shadow">
+              <p className="text-light mb-3">
                 The Build Tool for the Web. Vite is a blazing fast frontend
                 build tool powering the next generation of web applications.
               </p>
@@ -39,13 +43,13 @@ export default function DashboardViteAndDatabase() {
           </div>
         </Col>
 
-        <Col xs={12} sm={12} md={7} lg={8} xl={8} className="text-white">
-          <div className="p-4 h-100 bg-transparent-blur rounded border-lion-light">
+        <Col xs={12} sm={12} md={7} lg={8} xl={8}>
+          <div className="p-4 h-100 shadow rounded border-lion-light">
             <div className="mb-3">
               <FaDatabase
                 size={"3.5em"}
                 title="Database"
-                className="float-end ms-2"
+                className="float-end ms-2 text-light"
               />
 
               <Placeholder animation="wave">
@@ -53,20 +57,28 @@ export default function DashboardViteAndDatabase() {
               </Placeholder>
             </div>
 
-            <hr />
+            <hr className="text-light" />
 
             <Fragment>
-              <h5 className="text-shadow">{"Databases"}</h5>
+              <h5 className="text-light">{"Databases"}</h5>
 
-              <p className="text-secondary text-shadow">
+              <p className="text-light mb-3">
                 Compatible with any database engine, if you use Docker compose
                 you can implement any database service to your project.
               </p>
 
               <div className="text-center">
-                <GrMysql size={"3.2em"} title="MySQL" className="me-3" />
+                <GrMysql
+                  size={"3.2em"}
+                  title="MySQL"
+                  className="me-3 text-light"
+                />
 
-                <SiPostgresql size={"3.2em"} title="PostgreSQL" />
+                <SiPostgresql
+                  size={"3.2em"}
+                  title="PostgreSQL"
+                  className="text-light"
+                />
               </div>
             </Fragment>
           </div>

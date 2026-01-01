@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CopyToClipboard from "react-copy-to-clipboard";
+import CopyToClipboard from "react-copy-to-clipboard-ts";
 import { MdCheck, MdContentCopy } from "react-icons/md";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";

@@ -1,6 +1,6 @@
 services:
-    app:
-        container_name: lion-packages-dev-app
+    php:
+        container_name: lion-packages-dev-php
         build:
             context: .
             dockerfile: Dockerfile
@@ -10,6 +10,7 @@ services:
             - ./:/var/www/html
         networks:
             - lion
+
 networks:
     lion:
         driver: bridge

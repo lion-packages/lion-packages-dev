@@ -1,9 +1,16 @@
 version: 2
-updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+
+multi-ecosystem-groups:
+  maintenance:
     schedule:
       interval: "monthly"
       time: "05:15"
       timezone: "America/Bogota"
-    rebase-strategy: "auto"
+
+updates:
+  # Composer (PHP)
+  - package-ecosystem: "npm"
+    directory: "/"
+    patterns: ["*"]
+    multi-ecosystem-group: "maintenance"
+    labels: ["javascript", "dependencies"]

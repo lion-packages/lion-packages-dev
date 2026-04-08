@@ -6,11 +6,34 @@ multi-ecosystem-groups:
       interval: "monthly"
       time: "05:15"
       timezone: "America/Bogota"
+    milestone: 3
 
 updates:
-  # Composer (PHP)
+  # ========================
+  # Maintenance - ReactJS
+  # ========================
   - package-ecosystem: "npm"
     directory: "/"
     patterns: ["*"]
     multi-ecosystem-group: "maintenance"
-    labels: ["javascript", "dependencies"]
+    labels:
+      - "javascript"
+      - "dependencies"
+    reviewers:
+      - "Sleon4"
+
+  # ========================
+  # Security - ReactJS
+  # ========================
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 3
+    rebase-strategy: "auto"
+    labels:
+      - "javascript"
+      - "security"
+    reviewers:
+      - "Sleon4"
+    milestone: 3

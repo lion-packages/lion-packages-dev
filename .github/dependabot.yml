@@ -19,8 +19,9 @@ updates:
     labels:
       - "javascript"
       - "dependencies"
-    reviewers:
-      - "Sleon4"
+    ignore:
+      - dependency-name: "eslint"
+      - dependency-name: "eslint-plugin-react"
 
   # ========================
   # Security - ReactJS
@@ -34,6 +35,7 @@ updates:
     labels:
       - "javascript"
       - "security"
-    reviewers:
-      - "Sleon4"
     milestone: 3
+    ignore:
+      - dependency-name: "eslint"
+      - dependency-name: "eslint-plugin-react"
